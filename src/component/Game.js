@@ -9,6 +9,10 @@ export default class Game extends React.Component {
       history: [
         {
           squares: Array(3).fill(Array(3).fill(null)),
+          currentStep: {
+            x: null,
+            y: null
+          }
         }
       ],
       stepNumber: 0,
@@ -25,7 +29,8 @@ export default class Game extends React.Component {
       return;
     }
     squares[y][x] = this.state.xIsNext ? 'X' : 'O';
-    history = history.concat([{ squares }]);
+    const currentStep = { x, y }
+    history = history.concat([{ squares, currentStep }]);
     const stepNumber = history.length - 1;
     this.setState({ history, stepNumber, xIsNext: !this.state.xIsNext });
   }
@@ -34,20 +39,7 @@ export default class Game extends React.Component {
 
   tag = {
     arrayTag: '[object Array]',
-    boolTag: '[object Boolean]',
-    dateTag: '[object Date]',
-    errorTag: '[object Error]',
-    funcTag: '[object Function]',
-    mapTag: '[object Map]',
-    numberTag: '[object Number]',
-    nullTag: '[object Null]',
-    objectTag: '[object Object]',
-    promiseTag: '[object Promise]',
-    regexpTag: '[object RegExp]',
-    setTag: '[object Set]',
-    stringTag: '[object String]',
-    symbolTag: '[object Symbol]',
-    undefinedTag: '[object Undefined]'
+    objectTag: '[object Object]'
   }
 
   getValueTag (value) {
@@ -123,6 +115,7 @@ export default class Game extends React.Component {
   }
 
   jumpTo(i) {
+    console.log(this.state.history)
     this.setState({
       stepNumber: i,
       xIsNext: i % 2 === 0
@@ -149,11 +142,12 @@ export default class Game extends React.Component {
       <div className="game">
         <div className="game-board">
           <Board
-            squares={ current.squares } 
+            boardData={ current } 
             onClick={(i) => this.handleClick(i)} />
         </div>
         <div className="game-info">
           <div>{ status }</div>
+          <div><button onClick={() => this.sortStep()}>Sora</button></div>
           <ol>{move}</ol>
         </div>
       </div>

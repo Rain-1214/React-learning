@@ -5,29 +5,31 @@ export default class Board extends React.Component {
 
   renderSquare(i) {
     // console.log(Math.floor(i / this.props.squares.length), i % this.props.squares.length, this.props.squares)
+    const x = i % this.props.boardData.squares.length;
+    const y = Math.floor(i / this.props.boardData.squares.length)
+    const isStrong = x === this.props.boardData.currentStep.x && y === this.props.boardData.currentStep.y;
+    console.log(isStrong)
     return (<Square 
-      value={this.props.squares[Math.floor(i / this.props.squares.length)][i % this.props.squares.length]}
+      key={i}
+      isStrong = {isStrong}
+      value={this.props.boardData.squares[y][x]}
       onClick={() => this.props.onClick(i)}/>);
   }
 
   render() {
+    const length = this.props.boardData.squares.length;
+    const rows = [];
+    for (let i = 0; i < length; i++) {
+      let row = [];
+      for (let y = i * 3; y < i * 3 + length; y++) {
+        row.push(this.renderSquare(y));
+      }
+      rows.push(<div className="board-row" key={i}>{row}</div>);
+    }
+    
     return (
       <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+        {rows}
       </div>
     );
   }

@@ -14,7 +14,7 @@ import React from 'react'
 export const Square = (props) => {
     return (
     <button className="square" onClick={props.onClick}>
-      {props.value}
+      { props.isStrong ? <strong>{props.value}</strong> : props.value }
     </button>
   )
 }
