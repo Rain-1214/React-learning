@@ -4,14 +4,15 @@ export default class Clock extends React.Component {
   timerId = null
 
   constructor() {
+    super();
     this.state = {
-      data: new Data(),
+      date: new Date(),
     }
   }
 
   tick () {
     this.setState({
-      data: new Data()
+      date: new Date()
     })
   }
 
@@ -28,7 +29,7 @@ export default class Clock extends React.Component {
   render () {
     return (
       <div>
-        <h2>current Data:{this.state.data}</h2>
+        <h2>current Data:{this.state.date.toLocaleString()}</h2>
       </div>
     )
   }
