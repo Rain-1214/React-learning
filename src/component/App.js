@@ -2,6 +2,7 @@ import React from 'react'
 import Clock from './Clock'
 import Event from './Event'
 import Form from './Form'
+import Product from './Products'
 
 export default class App extends React.Component {
 
@@ -14,6 +15,8 @@ export default class App extends React.Component {
         <Event />
         <hr />
         <Form />
+        <hr />
+        <Product />
       </div>
     )
   }

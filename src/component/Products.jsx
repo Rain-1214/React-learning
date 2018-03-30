@@ -1,4 +1,6 @@
 import React from 'react';
+import SearchInput from './SearchInput';
+import ProductList from './ProductsList';
 
 export default class Product extends React.Component {
 
@@ -14,10 +16,30 @@ export default class Product extends React.Component {
   constructor () {
     super();
     this.state = {
-      products = []
+      products: [],
+      searchInputVal: '',
+      onlyShowInStock: false,
     }
   }
 
-  
+  componentDidMount () {
+    this.setState({products: this.data})
+  }
+
+  changeState(val) {
+    this.setState({...val}, () => {
+      console.log(this.state)
+    })
+  }
+
+  render () {
+    
+    return (
+      <div>
+        <SearchInput searchInputVal={this.state.searchInputVal} stateChange={this.changeState.bind(this)} />
+        <ProductList searchInputVal={this.state.searchInputVal} products={this.state.products} onlyShowInStock={this.state.onlyShowInStock} />
+      </div>
+    )
+  }
 
 }
