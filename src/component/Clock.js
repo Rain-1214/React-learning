@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default class Clock extends React.Component {
-  timerId = null
+  timerId = 0
 
   constructor() {
     super();

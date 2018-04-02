@@ -14,7 +14,7 @@ export default class ProductList extends React.Component {
         productItemsMap.set(e.category,tempArray)
       }
       const productsArray = productItemsMap.get(e.category);
-      productsArray.push((<ProductItem onlyShowInStock={this.props.onlyShowInStock} key={e.name} stocked={e.stocked} name={e.name} price={e.price} />))
+      productsArray.push((<ProductItem searchInputVal={this.props.searchInputVal} onlyShowInStock={this.props.onlyShowInStock} key={e.name} stocked={e.stocked} name={e.name} price={e.price} />))
     })
     const elements = [...productItemsMap.values()]
     

@@ -4,7 +4,13 @@ export default class ProductItem extends React.Component {
 
   render () {
 
+    console.log(this.props.searchInputVal)
+
     if (this.props.onlyShowInStock && !this.props.stocked) {
+      return null
+    }
+
+    if (this.props.searchInputVal !== '' && !this.props.name.toUpperCase().includes(this.props.searchInputVal.toUpperCase())) {
       return null
     }
 
