@@ -115,7 +115,6 @@ export default class Game extends React.Component {
   }
 
   jumpTo(i) {
-    console.log(this.state.history)
     this.setState({
       stepNumber: i,
       xIsNext: i % 2 === 0

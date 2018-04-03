@@ -4,7 +4,24 @@ import Event from './Event'
 import Form from './Form'
 import Product from './Products'
 import HasChildren from './HasChildren'
+import Refs from './Refs'
+import Pure from './Pure'
 export default class App extends React.Component {
+
+  index = 0;
+
+  constructor() {
+    super();
+    this.state = {
+      pureData: '123'
+    }
+  }
+
+  setPureData () {
+    this.setState({
+      pureData: ++this.index,
+    })
+  }
 
   render () {
     return (
@@ -20,6 +37,11 @@ export default class App extends React.Component {
         <Product />
         <hr  />
         <HasChildren left={'asdf'} right={'zxcv'}>123</HasChildren>
+        <hr  />
+        <Refs />                
+        <hr/>
+        <button onClick={this.setPureData.bind(this)}>Click</button>
+        <Pure data={this.state.pureData} />
       </div>
     )
   }

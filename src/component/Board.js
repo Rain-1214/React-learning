@@ -8,7 +8,6 @@ export default class Board extends React.Component {
     const x = i % this.props.boardData.squares.length;
     const y = Math.floor(i / this.props.boardData.squares.length)
     const isStrong = x === this.props.boardData.currentStep.x && y === this.props.boardData.currentStep.y;
-    console.log(isStrong)
     return (<Square 
       key={i}
       isStrong = {isStrong}
