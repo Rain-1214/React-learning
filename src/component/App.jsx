@@ -6,6 +6,7 @@ import Product from './Products'
 import HasChildren from './HasChildren'
 import Refs from './Refs'
 import Pure from './Pure'
+import Fragments from './Fragments'
 export default class App extends React.Component {
 
   index = 0;
@@ -42,6 +43,9 @@ export default class App extends React.Component {
         <hr/>
         <button onClick={this.setPureData.bind(this)}>Click</button>
         <Pure data={this.state.pureData} />
+        <hr/>
+        <Fragments />
+        <hr/>
       </div>
     )
   }
