@@ -11,9 +11,9 @@ export default class Refs extends React.Component {
 
   componentWillMount () {
     setTimeout(() => {
-      console.log(this.textInputRef)
-      console.log(this.buttonRef)
-      console.log(this.clockRef.current)
+      // console.log(this.textInputRef)
+      // console.log(this.buttonRef)
+      // console.log(this.clockRef.current)
     }, 0)
   }
 

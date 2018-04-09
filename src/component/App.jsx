@@ -7,6 +7,8 @@ import HasChildren from './HasChildren'
 import Refs from './Refs'
 import Pure from './Pure'
 import Fragments from './Fragments'
+import Portals from './Portals'
+import ErrorTestWrapper from './ErrorTestWrapper'
 export default class App extends React.Component {
 
   index = 0;
@@ -46,6 +48,9 @@ export default class App extends React.Component {
         <hr/>
         <Fragments />
         <hr/>
+        <Portals />
+        <hr/>
+        <ErrorTestWrapper />
       </div>
     )
   }

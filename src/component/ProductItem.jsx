@@ -4,8 +4,6 @@ export default class ProductItem extends React.PureComponent {
 
   render () {
 
-    console.log(this.props.searchInputVal)
-
     if (this.props.onlyShowInStock && !this.props.stocked) {
       return null
     }
