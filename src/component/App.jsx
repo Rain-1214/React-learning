@@ -9,6 +9,7 @@ import Pure from './Pure'
 import Fragments from './Fragments'
 import Portals from './Portals'
 import ErrorTestWrapper from './ErrorTestWrapper'
+import HocTestWithSubscription from './HocTest'
 export default class App extends React.Component {
 
   index = 0;
@@ -16,8 +17,13 @@ export default class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      pureData: '123'
+      pureData: '123',
+      liShowFlag: [false, true]
     }
+  }
+
+  componentWillMount () {
+    console.log(HocTestWithSubscription)
   }
 
   setPureData () {
@@ -27,8 +33,9 @@ export default class App extends React.Component {
   }
 
   render () {
-    return (
-      <div>
+    const lis = [];
+    if (this.state.liShowFlag[0]) {
+      lis.push(<li key={2}>
         <h1>Hello world</h1>
         <hr  />
         <Clock />
@@ -51,6 +58,20 @@ export default class App extends React.Component {
         <Portals />
         <hr/>
         <ErrorTestWrapper />
+      </li>)
+    }
+    if (this.state.liShowFlag[1]) {
+      lis.push(
+        <li key={1}>
+          <HocTestWithSubscription />
+        </li>
+      )
+    }
+    return (
+      <div>
+        <ul>
+          {lis}
+        </ul>
       </div>
     )
   }
