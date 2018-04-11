@@ -10,6 +10,8 @@ import Fragments from './Fragments'
 import Portals from './Portals'
 import ErrorTestWrapper from './ErrorTestWrapper'
 import HocTestWithSubscription from './HocTest'
+import RenderProps from './RenderProps'
+import RenderPropsTest from './RenderPropsTest'
 export default class App extends React.Component {
 
   index = 0;
@@ -23,7 +25,7 @@ export default class App extends React.Component {
   }
 
   componentWillMount () {
-    console.log(HocTestWithSubscription)
+    // console.log(HocTestWithSubscription)
   }
 
   setPureData () {
@@ -64,6 +66,10 @@ export default class App extends React.Component {
       lis.push(
         <li key={1}>
           <HocTestWithSubscription />
+          <hr/>
+          <RenderProps render={(mouse) => (
+            <RenderPropsTest mouse = {mouse} />
+          )} />
         </li>
       )
     }

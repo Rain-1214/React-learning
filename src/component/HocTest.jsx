@@ -4,7 +4,7 @@ import withSubscription from './hoc/withSubscription'
 class HocTest extends React.Component {
 
   componentWillMount () {
-    console.log(this.props.data)
+    // console.log(this.props.data)
   }
 
   render () {
