@@ -2,6 +2,7 @@ import * as React from 'react';
 
 interface BundlePropsType {
   load: Function;
+  loading: Function;
 }
 
 class Bundle extends React.Component<BundlePropsType> {
@@ -22,7 +23,7 @@ class Bundle extends React.Component<BundlePropsType> {
   }
 
   render () {
-    return this.state.mod ? this.state.mod : null;
+    return this.state.mod ? this.state.mod : this.props.loading();
   }
 
 }

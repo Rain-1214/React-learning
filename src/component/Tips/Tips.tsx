@@ -1,17 +1,8 @@
 import * as React from 'react';
-// import * as Loadable from 'react-loadable';
 import { Link, RouteComponentProps, Route } from 'react-router-dom';
 import Bundle from '../../entity/Bundle';
-// import Tip from './Tip';
-// const Tip = Loadable({
-//   loader: () => import('./Tip'),
-//   loading() {
-//     return <div>Loading...</div>;
-//   }
-// });
-
 const AsyncTip = (props: object) => (
-  <Bundle load={() => import('./Tip')} />
+  <Bundle load={() => import('./Tip')} loading={() => ( <div>Loading...</div> )} />
 );
 
 class Tips extends React.Component<RouteComponentProps<{}>> {
