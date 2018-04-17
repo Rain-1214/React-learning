@@ -5,7 +5,7 @@ class Tip extends React.PureComponent<RouteComponentProps<{ message: string }>> 
 
   render () {
     return (
-      <div>
+      <div className={this.props.match.params.message}>
         <p>{this.props.match.params.message || 'select a message'}</p>
       </div>
     );

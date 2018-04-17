@@ -1,21 +1,26 @@
 import * as React from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 
 interface BundlePropsType {
-  load: Function;
+  // tslint:disable-next-line:no-any
+  load: Promise<any>;
   loading: Function;
 }
 
 class Bundle extends React.Component<BundlePropsType> {
-  state = {
+  // tslint:disable-next-line:no-any
+  state: { mod: null | React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any> } = {
     mod: null,
   };
 
   componentWillMount () {
     this.load(this.props);
+    // console.log('Bundle comWillMount:', this.props);
   }
 
   load (props: BundlePropsType) {
-    props.load((mod: { default: object }) => {
+    props.load.then((mod: { default?: object }) => {
+      // console.log(mod);
       this.setState({
         mod: mod.default ? mod.default : mod
       });
@@ -23,7 +28,8 @@ class Bundle extends React.Component<BundlePropsType> {
   }
 
   render () {
-    return this.state.mod ? this.state.mod : this.props.loading();
+    // console.log('Bundle render:', this.state.mod);
+    return this.state.mod ? <this.state.mod {...this.props} /> : this.props.loading();
   }
 
 }

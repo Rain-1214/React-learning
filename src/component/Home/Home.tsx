@@ -1,7 +1,11 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 
-class Home extends React.Component {
+class Home extends React.Component<RouteComponentProps<null>> {
+
+  componentWillMount() {
+    console.log(this.props.location);
+  }
 
   render () {
     return (
