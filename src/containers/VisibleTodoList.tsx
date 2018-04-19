@@ -1,42 +1,52 @@
-import { connect } from 'react-redux';
+import { StoreStateType } from '../store';
+import { TodoType } from '../component/Redux/Todo/Todo';
+import { Dispatch, connect, MapStateToProps, MapDispatchToProps } from 'react-redux';
+import { Action } from 'redux';
 import { toggleTodo } from '../store/action';
 import TodoList from '../component/Redux/TodoList/TodoList';
 
-// tslint:disable-next-line:no-any
-const getVisibleTodos = (todos: any, filter: any) => {
-  switch (filter) {
-    case 'SHOW_COMPLETED':
-      // tslint:disable-next-line:no-any
-      return todos.filter((t: any) => t.completed);
-    case 'SHOW_ACTIVE':
-      // tslint:disable-next-line:no-any
-      return todos.filter((t: any) => !t.completed);
-    case 'SHOW_ALL':
-    default:
-      return todos;
+enum ShowType {
+  SHOW_ALL = 'SHOW_ALL',
+  SHOW_ACTIVE = 'SHOW_ACTIVE',
+  SHOW_COMLETED = 'SHOW_COMLETED'
+}
+
+const getCurrentVisTodo = (todos: TodoType[], visibilityType: string) => {
+  switch (visibilityType) {
+    case ShowType.SHOW_ACTIVE:
+      return todos.filter(e => !e.completed);
+    case ShowType.SHOW_COMLETED:
+      return todos.filter(e => e.completed);
+    case ShowType.SHOW_ALL:
+    default: return todos;
   }
 };
 
-// tslint:disable-next-line:no-any
-const mapStateToProps = (state: any) => {
+interface TodosMapStateReturnType {
+  todos: TodoType[];
+}
+
+const mapStateToProps: MapStateToProps<TodosMapStateReturnType, StoreStateType, {}> = (state: StoreStateType) => {
   return {
-    todos: getVisibleTodos(state.todos, state.visibilityFilter)
+    todos: getCurrentVisTodo(state.todos, state.setVisibilityFilter)
   };
 };
 
-// tslint:disable-next-line:no-any
-const mapDispatchToProps = (dispatch: any) => {
+interface TodosMapDispatchReturnType {
+  onTodoClick: (id: number) => void;
+}
+
+const mapDispatchToProps: MapDispatchToProps<TodosMapDispatchReturnType, null> = (dispatch: Dispatch<Action>) => {
   return {
-    // tslint:disable-next-line:no-any
-    onTodoClick: (id: any) => {
+    onTodoClick: (id: number) => {
       dispatch(toggleTodo(id));
     }
   };
 };
 
-const VisibleTodoList = connect(
+const visibleTodoList = connect(
   mapStateToProps,
   mapDispatchToProps
 )(TodoList);
 
-export default VisibleTodoList;
+export default visibleTodoList;

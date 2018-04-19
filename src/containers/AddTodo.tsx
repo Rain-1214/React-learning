@@ -1,37 +1,45 @@
+import { connect, Store, DispatchProp, Dispatch } from 'react-redux';
 import * as React from 'react';
-import { connect } from 'react-redux';
 import { addTodo } from '../store/action';
+import { Action } from 'redux';
 
-// tslint:disable-next-line:no-any
-let AddTodo: any = ({ dispatch }: any) => {
-  // tslint:disable-next-line:no-any
-  let input: any;
+class AddTodoComponent extends React.Component<DispatchProp<Action>> {
 
-  return (
-    <div>
-      <form
-        onSubmit={e => {
-          e.preventDefault();
-          if (!input.value.trim()) {
-            return;
-          }
-          dispatch(addTodo(input.value));
-          input.value = '';
-        }}
-      >
-        <input
-          ref={node => {
-            input = node;
-          }}
-        />
-        <button type="submit">
-          Add Todo
-        </button>
-      </form>
-    </div>
-  );
-};
+  todoText: string = '';
 
-AddTodo = connect()(AddTodo);
+  constructor (props: Store<{}>) {
+    super(props);
+    this.inputValueChange = this.inputValueChange.bind(this);
+    this.submitTodoText = this.submitTodoText.bind(this);
+  }
+
+  inputValueChange (event: React.ChangeEvent<HTMLInputElement>) {
+    const value = event.target.value;
+    this.todoText = value;
+  }
+
+  submitTodoText (event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    (this.props.dispatch as Dispatch<Action>)(addTodo(this.todoText));
+  }
+
+  componentWillMount() {
+    console.log('AddTodo', this.props);
+  }
+
+  render () {
+
+    return (
+      <div>
+        <form>
+          <input type="text" placeholder="input todo text" onChange={this.inputValueChange} />
+          <button onClick={this.submitTodoText}>Add Todo</button>
+        </form>
+      </div>
+    );
+  }
+}
+
+const AddTodo = connect()(AddTodoComponent);
 
 export default AddTodo;

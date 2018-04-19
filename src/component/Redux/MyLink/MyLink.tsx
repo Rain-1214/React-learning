@@ -1,29 +1,49 @@
 import * as React from 'react';
 
-interface MyLinkType {
-  active: boolean;
-  onClick: () => void;
+export interface MyLinkType {
+  children?: React.ReactChild;
+  active?: boolean;
+  filter: string;
+  onClick?: () => void;
 }
 
-class MyLink extends React.Component<MyLinkType> {
+// class MyLink extends React.Component<MyLinkType> {
 
-  render () {
-    if (this.props.active) {
-      return (
-        <span>{this.props.children}</span>
-      );
-    }
+//   render () {
+//     if (this.props.active) {
+//       return (
+//         <span>{this.props.children}</span>
+//       );
+//     }
 
+//     return (
+//       <a href=""
+//         onClick={(event) => {
+//           event.preventDefault();
+//           this.props.onClick();
+//         }}>
+//         {this.props.children}
+//       </a>
+//     );
+//   }
+// }
+
+const MyLink = (props: MyLinkType) => {
+  if (props.active) {
     return (
-      <a href=""
-        onClick={(event) => {
-          event.preventDefault();
-          this.props.onClick();
-        }}>
-        {this.props.children}
-      </a>
+      <span>{props.children}</span>
     );
   }
-}
+
+  return (
+    <a href=""
+      onClick={(event) => {
+        event.preventDefault();
+        (props.onClick as Function)();
+      }}>
+      {props.children}
+    </a>
+  );
+};
 
 export default MyLink;

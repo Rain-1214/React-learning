@@ -1,16 +1,23 @@
-import { connect } from 'react-redux';
-import MyLink from '../component/Redux/MyLink/MyLink';
+import { MapStateToProps, MapDispatchToProps, connect } from 'react-redux';
+import { StoreStateType } from '../store';
+import MyLink, { MyLinkType } from '../component/Redux/MyLink/MyLink';
 import { setVisibilityFilter } from '../store/action';
 
-// tslint:disable-next-line:no-any
-const mapStateToProps = (state: any, ownProps: any) => {
+interface LinkMapStateReturnProp {
+  active: boolean;
+}
+
+const mapStateToProps: MapStateToProps<LinkMapStateReturnProp, MyLinkType, StoreStateType> = (state, ownProps) => {
   return {
-    active: ownProps.filter === state.visibilityFilter
+    active: state.setVisibilityFilter === ownProps.filter
   };
 };
 
-// tslint:disable-next-line:no-any
-const mapDispatchToProps = (dispatch: any, ownProps: any) => {
+interface LinkMapDispatchReturnProp {
+  onClick: () => void;
+}
+
+const mapDispatchToProps: MapDispatchToProps<LinkMapDispatchReturnProp, MyLinkType> = (dispatch, ownProps) => {
   return {
     onClick: () => {
       dispatch(setVisibilityFilter(ownProps.filter));
@@ -18,9 +25,9 @@ const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   };
 };
 
-const FilterLink = connect(
+const filterLink = connect(
   mapStateToProps,
   mapDispatchToProps
 )(MyLink);
 
-export default FilterLink;
+export default filterLink;

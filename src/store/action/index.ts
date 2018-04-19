@@ -1,23 +1,25 @@
+import { AddTodoActionType, SetVisFilterType, ToggleTodoType, Types } from './actionTypes';
+
 let nextTodoId = 0;
 
-export const addTodo = (text: string) => {
+export const addTodo = (text: string): AddTodoActionType => {
   return {
-    type: 'ADD_TODO',
+    type: Types.ADD_TODO,
     id: nextTodoId++,
     text,
   };
 };
 
-export const setVisibilityFilter = (filter: () => void) => {
+export const setVisibilityFilter = (filter: string): SetVisFilterType => {
   return {
-    type: 'SET_VISIBILITY_FILTER',
-    filter
+    type: Types.SET_VISIBILITY_FILTER,
+    filter,
   };
 };
 
-export const toggleTodo = (id: number) => {
+export const toggleTodo = (id: number): ToggleTodoType => {
   return {
-    type: 'TOGGLE_TODO',
-    id
+    type: Types.TOGGLE_TODO,
+    id,
   };
 };
