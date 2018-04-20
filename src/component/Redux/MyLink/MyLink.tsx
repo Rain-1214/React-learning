@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';  
 
 export interface MyLinkType {
   children?: React.ReactChild;
@@ -7,43 +8,21 @@ export interface MyLinkType {
   onClick?: () => void;
 }
 
-// class MyLink extends React.Component<MyLinkType> {
+class MyLink extends React.Component<MyLinkType> {
 
-//   render () {
-//     if (this.props.active) {
-//       return (
-//         <span>{this.props.children}</span>
-//       );
-//     }
+  render () {
+    if (this.props.active) {
+      return (
+        <span>{this.props.children}</span>
+      );
+    }
 
-//     return (
-//       <a href=""
-//         onClick={(event) => {
-//           event.preventDefault();
-//           this.props.onClick();
-//         }}>
-//         {this.props.children}
-//       </a>
-//     );
-//   }
-// }
-
-const MyLink = (props: MyLinkType) => {
-  if (props.active) {
     return (
-      <span>{props.children}</span>
+      <Link to={`/${this.props.filter}`}>
+        {this.props.children}
+      </Link>
     );
   }
-
-  return (
-    <a href=""
-      onClick={(event) => {
-        event.preventDefault();
-        (props.onClick as Function)();
-      }}>
-      {props.children}
-    </a>
-  );
-};
+}
 
 export default MyLink;

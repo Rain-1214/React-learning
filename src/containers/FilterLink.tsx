@@ -4,7 +4,7 @@ import MyLink, { MyLinkType } from '../component/Redux/MyLink/MyLink';
 import { setVisibilityFilter } from '../store/action';
 
 interface LinkMapStateReturnProp {
-  active: boolean;
+  active?: boolean;
 }
 
 const mapStateToProps: MapStateToProps<LinkMapStateReturnProp, MyLinkType, StoreStateType> = (state, ownProps) => {
@@ -14,13 +14,13 @@ const mapStateToProps: MapStateToProps<LinkMapStateReturnProp, MyLinkType, Store
 };
 
 interface LinkMapDispatchReturnProp {
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const mapDispatchToProps: MapDispatchToProps<LinkMapDispatchReturnProp, MyLinkType> = (dispatch, ownProps) => {
   return {
     onClick: () => {
-      dispatch(setVisibilityFilter(ownProps.filter));
+      dispatch(setVisibilityFilter(ownProps.filter as string));
     }
   };
 };

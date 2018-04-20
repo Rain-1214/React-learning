@@ -9,7 +9,6 @@ interface TodoListProps {
 class TodoList extends React.Component<TodoListProps> {
 
   render () {
-    
     return (
       <ul>
         {this.props.todos.map((todo: TodoType, index: number) => (

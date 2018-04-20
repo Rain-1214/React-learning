@@ -14,9 +14,9 @@ const todos: Reducer<TodoType[]> = (state: TodoType[] = [], action: AddTodoActio
        }
      ];
     case Types.TOGGLE_TODO:
-     return state.map((todo: TodoType, index: number) => {
-      return { ...todo, completed: action.id === todo.id ? todo.completed : todo.completed };
-     });
+     return state.map((todo: TodoType) => (
+       todo.id === action.id ? { ...todo, completed: !todo.completed } : todo
+     ));
     default: return state;
   }
 };

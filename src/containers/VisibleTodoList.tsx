@@ -5,7 +5,7 @@ import { Action } from 'redux';
 import { toggleTodo } from '../store/action';
 import TodoList from '../component/Redux/TodoList/TodoList';
 
-enum ShowType {
+export enum ShowType {
   SHOW_ALL = 'SHOW_ALL',
   SHOW_ACTIVE = 'SHOW_ACTIVE',
   SHOW_COMLETED = 'SHOW_COMLETED'
@@ -26,7 +26,7 @@ interface TodosMapStateReturnType {
   todos: TodoType[];
 }
 
-const mapStateToProps: MapStateToProps<TodosMapStateReturnType, StoreStateType, {}> = (state: StoreStateType) => {
+const mapStateToProps: MapStateToProps<TodosMapStateReturnType, {}, StoreStateType> = (state: StoreStateType) => {
   return {
     todos: getCurrentVisTodo(state.todos, state.setVisibilityFilter)
   };

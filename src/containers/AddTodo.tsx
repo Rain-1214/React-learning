@@ -1,13 +1,19 @@
-import { connect, Store, DispatchProp, Dispatch } from 'react-redux';
+import { connect, DispatchProp, Dispatch } from 'react-redux';
 import * as React from 'react';
 import { addTodo } from '../store/action';
 import { Action } from 'redux';
 
-class AddTodoComponent extends React.Component<DispatchProp<Action>> {
+interface AddTodoState {
+  value: string;
+}
 
-  todoText: string = '';
+class AddTodoComponent extends React.Component<DispatchProp<Action>, AddTodoState> {
 
-  constructor (props: Store<{}>) {
+  state = {
+    value: ''
+  };
+
+  constructor (props: DispatchProp<Action>) {
     super(props);
     this.inputValueChange = this.inputValueChange.bind(this);
     this.submitTodoText = this.submitTodoText.bind(this);
@@ -15,12 +21,17 @@ class AddTodoComponent extends React.Component<DispatchProp<Action>> {
 
   inputValueChange (event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
-    this.todoText = value;
+    this.setState({
+      value,
+    });
   }
 
   submitTodoText (event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
-    (this.props.dispatch as Dispatch<Action>)(addTodo(this.todoText));
+    (this.props.dispatch as Dispatch<Action>)(addTodo(this.state.value));
+    this.setState({
+      value: ''
+    });
   }
 
   componentWillMount() {
@@ -32,7 +43,7 @@ class AddTodoComponent extends React.Component<DispatchProp<Action>> {
     return (
       <div>
         <form>
-          <input type="text" placeholder="input todo text" onChange={this.inputValueChange} />
+          <input type="text" placeholder="input todo text" value={this.state.value} onChange={this.inputValueChange} />
           <button onClick={this.submitTodoText}>Add Todo</button>
         </form>
       </div>
