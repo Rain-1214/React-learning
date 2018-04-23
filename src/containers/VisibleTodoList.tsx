@@ -3,7 +3,7 @@ import { TodoType } from '../component/Redux/Todo/Todo';
 import { Dispatch, connect, MapStateToProps, MapDispatchToProps } from 'react-redux';
 import { Action } from 'redux';
 import { toggleTodo } from '../store/action';
-import TodoList from '../component/Redux/TodoList/TodoList';
+import TodoList, { TodoListProps } from '../component/Redux/TodoList/TodoList';
 
 export enum ShowType {
   SHOW_ALL = 'SHOW_ALL',
@@ -23,17 +23,17 @@ const getCurrentVisTodo = (todos: TodoType[], visibilityType: string) => {
 };
 
 interface TodosMapStateReturnType {
-  todos: TodoType[];
+  todos?: TodoType[];
 }
 
-const mapStateToProps: MapStateToProps<TodosMapStateReturnType, {}, StoreStateType> = (state: StoreStateType) => {
+const mapStateToProps: MapStateToProps<TodosMapStateReturnType, TodoListProps, StoreStateType> = (state, props) => {
   return {
-    todos: getCurrentVisTodo(state.todos, state.setVisibilityFilter)
+    todos: getCurrentVisTodo(state.todos, props.match.params.filter as string)
   };
 };
 
 interface TodosMapDispatchReturnType {
-  onTodoClick: (id: number) => void;
+  onTodoClick?: (id: number) => void;
 }
 
 const mapDispatchToProps: MapDispatchToProps<TodosMapDispatchReturnType, null> = (dispatch: Dispatch<Action>) => {

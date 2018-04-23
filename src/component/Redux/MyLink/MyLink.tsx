@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';  
+import { Link, RouteComponentProps } from 'react-router-dom';  
 
-export interface MyLinkType {
+export interface MyLinkType extends RouteComponentProps<{ filter: string }> {
   children?: React.ReactChild;
   active?: boolean;
   filter: string;

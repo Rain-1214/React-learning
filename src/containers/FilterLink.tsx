@@ -9,7 +9,7 @@ interface LinkMapStateReturnProp {
 
 const mapStateToProps: MapStateToProps<LinkMapStateReturnProp, MyLinkType, StoreStateType> = (state, ownProps) => {
   return {
-    active: state.setVisibilityFilter === ownProps.filter
+    active: ownProps.match.params.filter === ownProps.filter
   };
 };
 
@@ -20,7 +20,7 @@ interface LinkMapDispatchReturnProp {
 const mapDispatchToProps: MapDispatchToProps<LinkMapDispatchReturnProp, MyLinkType> = (dispatch, ownProps) => {
   return {
     onClick: () => {
-      dispatch(setVisibilityFilter(ownProps.filter as string));
+      dispatch(setVisibilityFilter(ownProps.match.params.filter as string));
     }
   };
 };
