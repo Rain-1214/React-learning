@@ -1,9 +1,15 @@
 import axios, { AxiosResponse } from 'axios';
 
+interface AjaxReturn<T> {
+  message: 'string';
+  stateCode: number;
+  data: T;
+}
+
 class UserService {
 
-  static login (username: string, password: string): Promise<AxiosResponse<{ userRole: string }>> {
-    return axios.post<{userRole: string}>('/api/user/login', {username, password});
+  static login (username: string, password: string): Promise<AxiosResponse<AjaxReturn<{userRole: string}>>> {
+    return axios.post('/api/user/login', {username, password});
   }
 
 }

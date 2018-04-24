@@ -1,11 +1,20 @@
 import * as React from 'react';
-import { MapDispatchToProps, connect } from 'react-redux';
+import { MapDispatchToProps, connect, MapStateToProps } from 'react-redux';
 import { login } from '../store/action/user';
+import { StoreStateType } from '../store';
 
-interface UserPropsType {
-  username: string;
-  userRole: string;
-  onSubmit: (username: string, password: string) => void;
+interface MapStateToPropsType {
+  username?: string;
+  userRole?: string;
+  userCopy?: string;
+}
+
+interface MapDispatchToPropsType {
+  onSubmit?: (username: string, password: string) => void;
+}
+
+interface UserPropsType extends MapStateToPropsType, MapDispatchToPropsType {
+  
 }
 
 interface UserStateType {
@@ -26,7 +35,7 @@ class User extends React.Component<UserPropsType, UserStateType> {
   }
 
   handleFormSubmit () {
-    this.props.onSubmit(this.state._username, this.state._password);
+    (this.props.onSubmit as Function)(this.state._username, this.state._password);
   }
 
   handleInputChange (type: string, event: React.ChangeEvent<HTMLInputElement>) {
@@ -44,35 +53,47 @@ class User extends React.Component<UserPropsType, UserStateType> {
     }
   }
 
+  componentWillMount() {
+    console.log(this.props);
+  }
+
   render () {
 
     return (
       <div>
-        <form onSubmit={this.handleFormSubmit}>
+        <form>
           <div>
             username: <input type="text"
               value={this.state._username} 
-              onChange={this.handleInputChange('username', event)}/>
+              onChange={this.handleInputChange.bind(this, 'username')}/>
           </div>
           <div>
-            password: <input type="password"/>
+            password: <input type="password"
+              value={this.state._password}
+              onChange={this.handleInputChange.bind(this, 'password')}/>
           </div>
-          <button>submit</button>
+          <button type="button" onClick={this.handleFormSubmit}>submit</button>
         </form>
         <hr/>
         <h2>
           username: {this.props.username}
           <br/>
           userRole: {this.props.userRole}
+          <br/>
+          userCopy: {this.props.userCopy}
         </h2>
       </div>
     );
   }
 }
 
-interface MapDispatchToPropsType {
-  onSubmit: (username: string, password: string) => void;
-}
+const mapStateToProps: MapStateToProps<MapStateToPropsType, UserPropsType, StoreStateType> = (state, ownProps) => {
+  return {
+    username: state.user.username,
+    userRole: state.user.userRole,
+    userCopy: state.userCopy
+  };
+};
 
 const mapDispatchToProps: MapDispatchToProps<MapDispatchToPropsType, UserPropsType> = (dispatch) => {
   return {
@@ -82,6 +103,9 @@ const mapDispatchToProps: MapDispatchToProps<MapDispatchToPropsType, UserPropsTy
   };
 };
 
-const UserContainers = connect(mapDispatchToProps)(User);
+const UserContainers = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(User);
 
 export default UserContainers;

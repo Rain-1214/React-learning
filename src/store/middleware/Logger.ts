@@ -2,7 +2,7 @@ import { Middleware, Action } from 'redux';
 import { Dispatch } from 'react-redux';
 
 // tslint:disable-next-line:no-any
-const logger: Middleware = (store: any) => (next: Dispatch<Action>) => (action: Action): any => {
+const logger: Middleware = (store: any) => (next: Dispatch<Action>) => (action: any): any => {
   console.group(action.type);
   console.info('dispatching', action);
   let result = next(action);

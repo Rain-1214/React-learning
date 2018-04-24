@@ -7,7 +7,8 @@ import VisibleTodoList, { ShowType } from './containers/VisibleTodoList';
 import Footer from './component/Redux/Footer/Footer';
 import logger from './store/middleware/Logger';
 import thunk from 'redux-thunk';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect, Link } from 'react-router-dom';
+import UserContainers from './containers/user';
 
 const stroe = createStore(
   todoApp,
@@ -39,6 +40,10 @@ class App extends React.Component {
                 </div>
               );
             }} />
+            <hr/>
+            <Link to="/user">user</Link>
+            <hr/>
+            <Route path="/user" component={UserContainers} />
           </div>
         </Router>
       </Provider>

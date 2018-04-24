@@ -1,11 +1,22 @@
 import { TodoType } from '../component/Redux/Todo/Todo';
 
-interface TodoStateType {
+export interface TodoStateType {
   todos: TodoType[];
 }
 
-interface VisFilterStateType {
+export interface VisFilterStateType {
   setVisibilityFilter: string;
 }
 
-export interface StoreStateType extends TodoStateType, VisFilterStateType {}
+export interface LoginStateType {
+  user: {
+    username: string;
+    userRole: string;
+  };
+}
+
+export interface LoginCopyStateType {
+  userCopy: string;
+}
+
+export interface StoreStateType extends TodoStateType, VisFilterStateType, LoginStateType, LoginCopyStateType {}
