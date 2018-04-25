@@ -3,6 +3,7 @@ import { TodoType } from '../component/Redux/Todo/Todo';
 import { Dispatch, connect, MapStateToProps, MapDispatchToProps } from 'react-redux';
 import { Action } from 'redux';
 import { toggleTodo } from '../store/action';
+import { createSelector } from 'reselect';
 import TodoList, { TodoListProps } from '../component/Redux/TodoList/TodoList';
 
 export enum ShowType {
@@ -11,16 +12,22 @@ export enum ShowType {
   SHOW_COMLETED = 'SHOW_COMLETED'
 }
 
-const getCurrentVisTodo = (todos: TodoType[], visibilityType: string) => {
-  switch (visibilityType) {
-    case ShowType.SHOW_ACTIVE:
-      return todos.filter(e => !e.completed);
-    case ShowType.SHOW_COMLETED:
-      return todos.filter(e => e.completed);
-    case ShowType.SHOW_ALL:
-    default: return todos;
+const getTodos = (state: StoreStateType) => state.todos;
+const getVisibilityType = (state: StoreStateType) => state.setVisibilityFilter;
+
+const getCurrentVisTodo = createSelector(
+  [getTodos, getVisibilityType],
+  (todos: TodoType[], visibilityType: string) => {
+    switch (visibilityType) {
+      case ShowType.SHOW_ACTIVE:
+        return todos.filter(e => !e.completed);
+      case ShowType.SHOW_COMLETED:
+        return todos.filter(e => e.completed);
+      case ShowType.SHOW_ALL:
+      default: return todos;
+    }
   }
-};
+);
 
 interface TodosMapStateReturnType {
   todos?: TodoType[];
@@ -28,7 +35,7 @@ interface TodosMapStateReturnType {
 
 const mapStateToProps: MapStateToProps<TodosMapStateReturnType, TodoListProps, StoreStateType> = (state, props) => {
   return {
-    todos: getCurrentVisTodo(state.todos, props.match.params.filter as string)
+    todos: getCurrentVisTodo(state)
   };
 };
 

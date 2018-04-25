@@ -3,24 +3,24 @@ import { MapDispatchToProps, connect, MapStateToProps } from 'react-redux';
 import { login } from '../store/action/user';
 import { StoreStateType } from '../store';
 
-interface MapStateToPropsType {
+type MapStateToPropsType = {
   username?: string;
   userRole?: string;
   userCopy?: string;
-}
+};
 
-interface MapDispatchToPropsType {
+type MapDispatchToPropsType = {
   onSubmit?: (username: string, password: string) => void;
-}
+};
 
 interface UserPropsType extends MapStateToPropsType, MapDispatchToPropsType {
   
 }
 
-interface UserStateType {
+type UserStateType = {
   _username: string;
   _password: string;
-}
+};
 
 class User extends React.Component<UserPropsType, UserStateType> {
 

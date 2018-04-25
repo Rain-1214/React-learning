@@ -9,6 +9,7 @@ import logger from './store/middleware/Logger';
 import thunk from 'redux-thunk';
 import { BrowserRouter as Router, Route, Redirect, Link } from 'react-router-dom';
 import UserContainers from './containers/user';
+import Count from './containers/Count';
 
 const stroe = createStore(
   todoApp,
@@ -42,8 +43,16 @@ class App extends React.Component {
             }} />
             <hr/>
             <Link to="/user">user</Link>
+            <br/>
+            <Link to="/count">count</Link>
             <hr/>
             <Route path="/user" component={UserContainers} />
+            <Route path="/count" render={() => (
+              <div>
+                <Count id="a" />
+                <Count id="b" />  
+              </div>
+            )} />
           </div>
         </Router>
       </Provider>

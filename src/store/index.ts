@@ -19,4 +19,11 @@ export interface LoginCopyStateType {
   userCopy: string;
 }
 
-export interface StoreStateType extends TodoStateType, VisFilterStateType, LoginStateType, LoginCopyStateType {}
+export interface CountStateType {
+  count: {
+    [key: string]: number
+  };
+}
+
+export interface StoreStateType extends TodoStateType, VisFilterStateType, LoginStateType, LoginCopyStateType
+                                        , CountStateType {}

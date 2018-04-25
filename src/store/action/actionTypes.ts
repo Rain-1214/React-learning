@@ -8,7 +8,8 @@ export const Types = {
   TOGGLE_TODO: 'TOGGLE_TODO',
   USER_LOGIN: 'USER_LOGIN',
   USER_LOGIN_SUCCESS: 'USER_LOGIN_SUCCESS',
-  USER_LOGIN_FAIL: 'USER_LOGIN_FAIL'
+  USER_LOGIN_FAIL: 'USER_LOGIN_FAIL',
+  ADD_COUNT: 'ADD_COUNT'
 };
 
 export interface AddTodoActionType extends BaseType {
@@ -30,4 +31,9 @@ export interface LoginActionType extends BaseType {
 
 export interface LoginSuccessActionType extends BaseType {
   userRole: string;
+}
+
+export interface AddCountType extends BaseType {
+  id: string;
+  num: number;
 }
