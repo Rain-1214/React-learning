@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { MapDispatchToProps, connect, MapStateToProps } from 'react-redux';
-import { login } from '../store/action/user';
 import { StoreStateType } from '../store';
+import { login } from '../store/action/user';
 
 type MapStateToPropsType = {
   username?: string;
@@ -97,7 +97,7 @@ const mapStateToProps: MapStateToProps<MapStateToPropsType, UserPropsType, Store
 
 const mapDispatchToProps: MapDispatchToProps<MapDispatchToPropsType, UserPropsType> = (dispatch) => {
   return {
-    onSubmit: (username: string, password) => {
+    onSubmit: (username: string, password: string) => {
       dispatch(login(username, password));
     }
   };

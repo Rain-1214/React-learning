@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 
-interface AjaxReturn<T> {
+export interface AjaxReturn<T> {
   message: 'string';
   stateCode: number;
   data: T;

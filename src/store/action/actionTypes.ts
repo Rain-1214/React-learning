@@ -29,6 +29,11 @@ export interface LoginActionType extends BaseType {
   username: string;
 }
 
+export interface LoginFullActionType extends BaseType {
+  username: string;
+  password: string;
+}
+
 export interface LoginSuccessActionType extends BaseType {
   userRole: string;
 }

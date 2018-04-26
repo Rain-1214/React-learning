@@ -6,18 +6,25 @@ import AddTodo from './containers/AddTodo';
 import VisibleTodoList, { ShowType } from './containers/VisibleTodoList';
 import Footer from './component/Redux/Footer/Footer';
 import logger from './store/middleware/Logger';
-import thunk from 'redux-thunk';
+// import thunk from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
 import { BrowserRouter as Router, Route, Redirect, Link } from 'react-router-dom';
 import UserContainers from './containers/user';
 import Count from './containers/Count';
+import UserSaga from './store/saga/UserSaga';
+
+const sagaMiddleware = createSagaMiddleware();
 
 const stroe = createStore(
   todoApp,
   applyMiddleware(
     logger,
-    thunk
+    // thunk,
+    sagaMiddleware
   )
 );
+
+sagaMiddleware.run(UserSaga);
 
 class App extends React.Component {
   render() {
