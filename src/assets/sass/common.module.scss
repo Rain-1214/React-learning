@@ -1,0 +1,32 @@
+@import './_variable.scss';
+
+// tool class 
+.textCenter{
+  text-align: center;
+}
+
+.textRight{
+  text-align: right;
+}
+
+.clearMarginBottom {
+  margin-bottom: 0 !important;
+}
+
+// button style
+.btnBlock{
+  display: block;
+  width: 100%;
+}
+
+.btnSmPadding{
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+//font size
+.fontSizeSm{
+  font-size: $font-size-sm;
+}
+
+

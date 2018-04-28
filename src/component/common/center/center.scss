@@ -1,0 +1,5 @@
+@import '../../../assets/sass/_mixin.scss';
+
+.all-center {
+  @include all-center(absolute);
+}

@@ -1,5 +1,6 @@
 const { getLoader } = require("react-app-rewired");
 const tsImportPluginFactory = require('ts-import-plugin');
+const rewiredCssModules = require('react-app-rewire-css-modules');
 
 module.exports = function override(config, env) {
   const tsLoader = getLoader(
@@ -19,6 +20,8 @@ module.exports = function override(config, env) {
       }) ]
     })
   };
+
+  config = rewiredCssModules(config, env);
 
   return config;
 }
