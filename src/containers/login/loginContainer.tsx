@@ -12,7 +12,14 @@ const mapDispatchToProps: MapDispatchToProps<ILoginContainerMapDispatchType, ILo
   }
 }
 
+const mapStateToProps = () => {
+  return {
+
+  }
+}
+
 const Login = connect(
+  mapStateToProps,
   mapDispatchToProps
 )(loginComponent)
 
