@@ -4,10 +4,10 @@ import { createStore, applyMiddleware } from "redux";
 import rootReducer from "./reducer";
 
 const epicMiddleware = createEpicMiddleware(rootEpic);
-const store = createStore(
+const createStoreFactory = () => createStore(
   rootReducer,
   applyMiddleware(epicMiddleware)
 )
 
-export default store;
+export default createStoreFactory;
 

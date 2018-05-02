@@ -13,14 +13,16 @@ const defaultUserState: IUserState = {
 export const user: Reducer = (state: IUserState = defaultUserState, action: ILoginSuccessActionType | ILoginFailActionType) => {
   switch (action.type) {
     case ActionsTypes.USER_LOGIN_SUCCESS: 
-      return Object.assign({}, state, {
+      return {
+        ...state,
         username: (action as ILoginSuccessActionType).username,
         userRole: (action as ILoginSuccessActionType).userRole
-      });
+      }
     case ActionsTypes.USER_LOGIN_FAIL:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         loginErrorMessage: (action as ILoginFailActionType).errorMessage
-      })
+      }
     default: return state;
   }
 }

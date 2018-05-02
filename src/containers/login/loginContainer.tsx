@@ -1,8 +1,9 @@
-import { MapDispatchToProps, connect } from "react-redux";
-import { ILoginContainerMapDispatchType } from "./loginContainer.type";
-import { ILoginComponentProps } from "../../component/login/login.type";
+import { MapDispatchToProps, connect, MapStateToProps } from "react-redux";
+import { ILoginContainerMapDispatchType, ILoginContainerMapStateType } from "./loginContainer.type";
 import { loginAction } from "../../store/actions/loginActions/loginActions";
 import loginComponent from "../../component/login/loginComponent";
+import { ILoginComponentProps, } from './../../component/login/loginComponent.type';
+import { IStoreState } from "../../store/index.type";
 
 const mapDispatchToProps: MapDispatchToProps<ILoginContainerMapDispatchType, ILoginComponentProps> = (dispatch, ownProps) => {
   return {
@@ -12,15 +13,16 @@ const mapDispatchToProps: MapDispatchToProps<ILoginContainerMapDispatchType, ILo
   }
 }
 
-const mapStateToProps = () => {
+const mapStateToProps: MapStateToProps<ILoginContainerMapStateType, ILoginComponentProps, IStoreState> = (state, ownProps) => {
   return {
-
+    isLogin: state.user.isLogin,
+    loginErrorMessage: state.user.loginErrorMessage
   }
 }
 
 const Login = connect(
   mapStateToProps,
   mapDispatchToProps
-)(loginComponent)
+)(loginComponent as React.ComponentClass<ILoginComponentProps>)
 
-export default Login;
+export default Login; 
