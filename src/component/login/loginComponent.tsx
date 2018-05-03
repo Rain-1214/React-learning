@@ -8,16 +8,6 @@ import { ILoginComponentProps, ILoginFormTypes } from './loginComponent.type';
 
 class LoginComponent extends React.Component<ILoginComponentProps> {
 
-  public componentWillMount () {
-    // tslint:disable-next-line:no-console
-    console.log(this.props);
-  }
-
-  public componentWillReceiveProps(nextProps: ILoginComponentProps) {
-    // tslint:disable-next-line:no-console
-    // console.log(nextProps);
-  }
-
   public handleSubmit = () => {
     this.props.form.validateFields((error, value: ILoginFormTypes) => {
       if (!error) {
@@ -26,20 +16,21 @@ class LoginComponent extends React.Component<ILoginComponentProps> {
     });
   }
 
-  public render () {
-    const errorCom = () => {
-      if (this.props.loginErrorMessage !== '') {
-        return (<Alert message={this.props.loginErrorMessage} type="error" showIcon={true} closable={true} />)
-      }
-      return null;
+  public createErrorAlert() {
+    if (this.props.loginErrorMessage !== '') {
+      return (<Alert message={this.props.loginErrorMessage} type="error" showIcon={true} closable={true} key={this.props.loginTime} />)
     }
+    return null;
+  }
+
+  public render () {
 
     return (
       <div className={ComponentStyle.userLayout}>
         <Center centerDirection={ComponentStyle.formWrapper}>
           <h2 className={CommonStyle.textCenter}>登录</h2>
           <Form>
-            { errorCom() }
+            { this.createErrorAlert() }
             <Form.Item>
               {this.props.form.getFieldDecorator('username', {
                 rules: [{ required: true, message: 'please input you username!!!' }]

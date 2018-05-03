@@ -3,8 +3,7 @@ import { ILoginContainerMapDispatchType, ILoginContainerMapStateType } from "../
 import { RouteComponentProps } from "react-router";
 
 export interface ILoginComponentProps extends FormComponentProps, ILoginContainerMapDispatchType, ILoginContainerMapStateType
-                                              , RouteComponentProps<null> {
-                                                
+                                              , RouteComponentProps<null> {                                                
 }
 
 export interface ILoginFormTypes {

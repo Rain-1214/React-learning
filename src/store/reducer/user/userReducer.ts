@@ -7,7 +7,8 @@ const defaultUserState: IUserState = {
   isLogin: false,
   username: '',
   userRole: '',
-  loginErrorMessage: ''
+  loginErrorMessage: '',
+  loginTime: 0
 }
 
 export const user: Reducer = (state: IUserState = defaultUserState, action: ILoginSuccessActionType | ILoginFailActionType) => {
@@ -21,7 +22,8 @@ export const user: Reducer = (state: IUserState = defaultUserState, action: ILog
     case ActionsTypes.USER_LOGIN_FAIL:
       return {
         ...state,
-        loginErrorMessage: (action as ILoginFailActionType).errorMessage
+        loginErrorMessage: (action as ILoginFailActionType).errorMessage,
+        loginTime: (action as ILoginFailActionType).time
       }
     default: return state;
   }

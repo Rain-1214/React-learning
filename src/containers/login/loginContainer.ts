@@ -16,7 +16,8 @@ const mapDispatchToProps: MapDispatchToProps<ILoginContainerMapDispatchType, ILo
 const mapStateToProps: MapStateToProps<ILoginContainerMapStateType, ILoginComponentProps, IStoreState> = (state, ownProps) => {
   return {
     isLogin: state.user.isLogin,
-    loginErrorMessage: state.user.loginErrorMessage
+    loginErrorMessage: state.user.loginErrorMessage,
+    loginTime: state.user.loginTime
   }
 }
 

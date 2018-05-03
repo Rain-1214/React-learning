@@ -1,19 +1,20 @@
 import { MapStateToProps } from 'react-redux';
 import { IHandleErrorMapStateType } from './handleErrorContainer.type';
-import { IHandleErrorProps } from './../../../component/common/handleError/handleError.type';
 import { IStoreState } from '../../../store/index.type';
 import { connect } from 'react-redux';
-import HandleError from '../../../component/common/handleError/handleError';
+import { IHandleErrorProps } from '../../../component/common/handleError/handleErrorComponent.type';
+import HandleErrorComponent from '../../../component/common/handleError/handleErrorComponent';
 
 const mapStateToProps: MapStateToProps<IHandleErrorMapStateType, IHandleErrorProps, IStoreState> = (state, ownProps) => {
   return {
     errorType: state.handleError.errorType,
-    errorMessage: state.handleError.errorMessage
+    errorMessage: state.handleError.errorMessage,
+    time: state.handleError.time
   };
 }
 
-const HandleErrorContainer = connect(
+const HandleError = connect(
   mapStateToProps
-)(HandleError as React.ComponentClass<IHandleErrorProps>)
+)(HandleErrorComponent as React.ComponentClass<IHandleErrorProps>)
 
-export default HandleErrorContainer;
+export default HandleError;

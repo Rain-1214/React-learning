@@ -8,5 +8,6 @@ export enum ActionsTypes {
 
   // common
   HANDLE_ERROR = 'HANDLE_ERROR'
+  
 
 }

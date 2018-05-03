@@ -10,6 +10,10 @@ class UserService {
     return Observable.fromPromise(axios.post('/api/user/login',  { username, password }))
   }
 
+  public static checkUsernameCanUse (username: string): Observable<AxiosResponse<IAjaxReturn<null>>> {
+    return Observable.fromPromise(axios.post('/api/user/checkUsername', { username }))
+  }
+
 }
 
 export default UserService;

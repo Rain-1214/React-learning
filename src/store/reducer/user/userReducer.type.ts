@@ -4,4 +4,5 @@ export interface IUserState {
   username: string;
   userRole: string;
   loginErrorMessage: string;
+  loginTime: number;
 }

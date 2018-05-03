@@ -1,11 +1,12 @@
 import { Reducer } from "redux";
-import { IHandleErrorState } from './handleError.type';
 import { ActionsTypes } from "../../../actions/allActionsType";
 import { IHandleErrorActionType } from "../../../actions/common/handleError/index.type";
+import { IHandleErrorState } from "./handleErrorReducer.type";
 
 const defaultState: IHandleErrorState = {
   errorType: '',
-  errorMessage: ''
+  errorMessage: '',
+  time: 0
 }
 
 const handleError: Reducer = (state: IHandleErrorState = defaultState, action: IHandleErrorActionType) => {
@@ -14,7 +15,8 @@ const handleError: Reducer = (state: IHandleErrorState = defaultState, action: I
       return {
         ...state,
         errorType: action.errorType,
-        errorMessage: action.errorMessage
+        errorMessage: action.errorMessage,
+        time: action.time
       }
     default: return state;
   }

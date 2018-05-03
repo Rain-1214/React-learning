@@ -12,4 +12,5 @@ export interface ILoginSuccessActionType extends Action {
 
 export interface ILoginFailActionType extends Action {
   errorMessage: string;
+  time: number;
 }

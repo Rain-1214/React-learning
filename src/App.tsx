@@ -3,7 +3,8 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './App.scss';
 import createStoreFactory from './store/index';
-import { Login } from './router/user';
+import { Login, Register } from './router/user';
+import HandleError from './containers/common/handleError/handleErrorContainer';
 
 const store = createStoreFactory();
 
@@ -12,7 +13,11 @@ class App extends React.Component {
     return (
       <Provider store={store}>
         <Router>
-          <Route path="/" exact={true} component={Login} />
+          <div>
+            <Route path="/" exact={true} component={Login} />
+            <Route path="/register" component={Register} />
+            <HandleError />
+          </div>
         </Router>
       </Provider>
     );

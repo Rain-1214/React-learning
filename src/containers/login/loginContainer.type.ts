@@ -6,4 +6,5 @@ export interface ILoginContainerMapDispatchType {
 export interface ILoginContainerMapStateType {
   isLogin: boolean;
   loginErrorMessage: string;
+  loginTime: number;
 }

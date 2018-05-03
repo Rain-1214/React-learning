@@ -4,7 +4,7 @@ import { Action } from "redux";
 import { IStoreState } from "../../index.type";
 import { ActionsTypes } from "../../actions/allActionsType";
 import { loginSuccessAction } from "../../actions/loginActions/loginActions";
-import { handleError } from './../../actions/common/handleError/index';
+import { loginFailAction } from './../../actions/loginActions/loginActions';
 import UserService from "../../../api/user/userService";
 
 import 'rxjs/add/operator/switchMap';
@@ -17,7 +17,7 @@ const userEpic: Epic<Action, IStoreState> = (action$, store) => {
                          .map(res => (
                            res.data.stateCode === 1 ?
                             loginSuccessAction(action.username, res.data.data.userRole) :
-                            handleError(ActionsTypes.USER_LOGIN_FAIL, res.data.message)
+                            loginFailAction(res.data.message)
                          ))
                 })
 }

@@ -20,6 +20,7 @@ export const loginSuccessAction = (username: string, userRole: string): ILoginSu
 export const loginFailAction = (errorMessage: string): ILoginFailActionType => {
   return {
     type: ActionsTypes.USER_LOGIN_FAIL,
-    errorMessage
+    errorMessage,
+    time: new Date().getTime()
   }
 }

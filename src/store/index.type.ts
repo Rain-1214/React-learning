@@ -1,5 +1,5 @@
 import { IUserState } from "./reducer/user/userReducer.type";
-import { IHandleErrorState } from './reducer/common/handleError/handleError.type';
+import { IHandleErrorState } from "./reducer/common/handleError/handleErrorReducer.type";
 
 export interface IStoreUserState {
   user: IUserState
