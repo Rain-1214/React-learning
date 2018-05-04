@@ -7,6 +7,6 @@ export const Login = Loadable({
 });
 
 export const Register = Loadable({
-  loader: () => import('../../component/register/registerComponent'),
+  loader: () => import('../../containers/register/registerContainer'),
   loading: () => (<div>123</div>)
 })

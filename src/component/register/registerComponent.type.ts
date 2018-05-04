@@ -1,8 +1,20 @@
 
 import { FormComponentProps } from 'antd/lib/form/Form';
+import { IRegisterContainerMapDispatch } from '../../containers/register/registerContainer.type';
+import { RouteComponentProps } from 'react-router';
 
-export interface IRegisterComponentProps extends FormComponentProps {}
+export interface IRegisterComponentProps extends FormComponentProps, IRegisterContainerMapDispatch, RouteComponentProps<null> {}
 
 export interface IRegisterComponentState {
-  usernameCanUser: boolean;
+  registerLoading: boolean;
+  verificationText: string;
+  verificationButtonDisable: boolean;
+}
+
+export interface IRegisterForm {
+  username: string;
+  password: string;
+  passwordAgain: string;
+  email: string;
+  code: string;
 }
