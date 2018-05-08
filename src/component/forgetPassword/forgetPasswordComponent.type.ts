@@ -1,6 +1,7 @@
 import { FormComponentProps } from "antd/lib/form";
+import { RouteComponentProps } from "react-router";
 
-export interface IForgetPasswordProps extends FormComponentProps {
+export interface IForgetPasswordProps extends FormComponentProps, RouteComponentProps<null> {
 
 }
 

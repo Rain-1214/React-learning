@@ -24,6 +24,8 @@ class ForgetPasswordComponent extends React.Component<IForgetPasswordProps, IFor
   constructor(props: IForgetPasswordProps) {
     super(props);
     this.submitUsername = this.submitUsername.bind(this);
+    this.submitVerificationCode = this.submitVerificationCode.bind(this);
+    this.submitNewPassword = this.submitNewPassword.bind(this);
   }
 
   public submitUsername () {
@@ -44,6 +46,49 @@ class ForgetPasswordComponent extends React.Component<IForgetPasswordProps, IFor
         this.setState({
           btnLoadingFlag: false
         })
+      }
+    })
+  }
+
+  public submitVerificationCode () {
+    this.props.form.validateFields(['code'], async (error: any, value: { code: string }) => {
+      if (!error) {
+        this.setState({
+          btnLoadingFlag: true
+        })
+        const res = await UserService.checkForgetPassCode(value.code).toPromise();
+        if (res.data.stateCode === 1) {
+          this.setState({
+            step: this.state.step + 1
+          })
+        } else {
+          message.error(res.data.message);
+        }
+        this.setState({
+          btnLoadingFlag: false
+        })
+      }
+    })
+  }
+
+  public submitNewPassword () {
+    this.props.form.validateFields(['password'], async (error: any, value: { password: string }) => {
+      if (!error) {
+        this.setState({
+          btnLoadingFlag: true
+        })
+        const res = await UserService.setNewPass(value.password).toPromise();
+        if (res.data.stateCode === 1) {
+          message.success('修改成功,即将跳转至登陆页面');
+          setTimeout(() => {
+            this.props.history.push('/login');
+          }, 2000)
+        } else {
+          message.error(res.data.message);
+          this.setState({
+            btnLoadingFlag: false
+          })
+        }
       }
     })
   }
@@ -87,7 +132,7 @@ class ForgetPasswordComponent extends React.Component<IForgetPasswordProps, IFor
                 }
               </Form.Item>
               <div>
-                <Button type="primary">
+                <Button type="primary" onClick={this.submitVerificationCode} loading={this.state.btnLoadingFlag} disabled={this.state.btnLoadingFlag}>
                   提交
                 </Button>
               </div>
@@ -124,7 +169,7 @@ class ForgetPasswordComponent extends React.Component<IForgetPasswordProps, IFor
                 }
               </Form.Item>
               <div>
-                <Button type="primary">
+                <Button type="primary" onClick={this.submitNewPassword} loading={this.state.btnLoadingFlag} disabled={this.state.btnLoadingFlag}>
                   提交
                 </Button>
               </div>
@@ -146,7 +191,7 @@ class ForgetPasswordComponent extends React.Component<IForgetPasswordProps, IFor
                 }
               </Form.Item>
               <div>
-                <Button type="primary" onClick={this.submitUsername}>
+                <Button type="primary" onClick={this.submitUsername} loading={this.state.btnLoadingFlag} disabled={this.state.btnLoadingFlag}>
                   提交
                 </Button>
               </div>

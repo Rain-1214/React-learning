@@ -6,6 +6,10 @@ export interface ILoginComponentProps extends FormComponentProps, ILoginContaine
                                               , RouteComponentProps<null> {                                                
 }
 
+export interface ILoginComponentState {
+  btnLoadingFlag: boolean;
+}
+
 export interface ILoginFormTypes {
   username: string;
   password: string;

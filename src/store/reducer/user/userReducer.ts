@@ -16,6 +16,7 @@ export const user: Reducer = (state: IUserState = defaultUserState, action: ILog
     case ActionsTypes.USER_LOGIN_SUCCESS: 
       return {
         ...state,
+        isLogin: true,
         username: (action as ILoginSuccessActionType).username,
         userRole: (action as ILoginSuccessActionType).userRole
       }

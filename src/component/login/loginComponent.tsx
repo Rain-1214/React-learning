@@ -4,13 +4,32 @@ import ComponentStyle from '../../assets/sass/component.module.scss';
 import CommonStyle from '../../assets/sass/common.module.scss';
 import { Form, Input, Icon, Button, Alert } from 'antd';
 import { Link } from "react-router-dom";
-import { ILoginComponentProps, ILoginFormTypes } from './loginComponent.type';
+import { ILoginComponentProps, ILoginFormTypes, ILoginComponentState } from './loginComponent.type';
 
-class LoginComponent extends React.Component<ILoginComponentProps> {
+class LoginComponent extends React.Component<ILoginComponentProps, ILoginComponentState> {
+
+  public state: ILoginComponentState = {
+    btnLoadingFlag: false
+  }
+
+  public componentWillReceiveProps(nextProps: ILoginComponentProps) {
+    if (nextProps.isLogin) {
+      this.props.history.push('/student')
+    } else {
+      if (this.state.btnLoadingFlag) {
+        this.setState({
+          btnLoadingFlag: false
+        })
+      }
+    }
+  }
 
   public handleSubmit = () => {
     this.props.form.validateFields((error, value: ILoginFormTypes) => {
       if (!error) {
+        this.setState({
+          btnLoadingFlag: true
+        })
         this.props.loginDispatch(value.username, value.password);
       }
     });
@@ -50,7 +69,11 @@ class LoginComponent extends React.Component<ILoginComponentProps> {
             <p className={`${CommonStyle.textRight} ${CommonStyle.fontSizeSm}`}>
               <Link to="/forgetPassword">Forget Password</Link> or <Link to="/register">Register Now</Link>
             </p>
-            <Button type="primary" onClick={this.handleSubmit} className={CommonStyle.btnBlock}>Log in</Button>
+            <Button type="primary" 
+                    onClick={this.handleSubmit}
+                    className={CommonStyle.btnBlock}
+                    loading={this.state.btnLoadingFlag}
+                    disabled={this.state.btnLoadingFlag}>Log in</Button>
           </Form>
         </Center>
       </div>
