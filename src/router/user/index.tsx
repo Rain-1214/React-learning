@@ -15,3 +15,8 @@ export const ForgetPassword = Loadable({
   loader: () => import('../../component/forgetPassword/forgetPasswordComponent'),
   loading: () => (<div>loading...</div>)
 })
+
+export const Student = Loadable({
+  loader: () => import('../../containers/student/studentContainer'),
+  loading: () => (<div>loading...</div>)
+})
