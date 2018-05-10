@@ -7,7 +7,10 @@ export enum ActionsTypes {
   USER_LOGIN_FAIL = 'USER_LOGIN_FAIL',
 
   // common
-  HANDLE_ERROR = 'HANDLE_ERROR'
+  HANDLE_ERROR = 'HANDLE_ERROR',
   
+  // student
+  GET_GRADE = 'GET_GRADE',
+  GET_GRADE_SUCCESS = 'GET_GRADE_SUCCESS',
 
 }

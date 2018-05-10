@@ -3,3 +3,10 @@
   font-size: 12px;
   border-bottom: 1px solid #c1c1c1;
 }
+
+.setPadding {
+  padding: 10px;
+  &.clear-padding-top{
+    padding-top: 0;
+  }
+}

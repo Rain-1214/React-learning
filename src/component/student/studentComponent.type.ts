@@ -1,5 +1,5 @@
-import { IStudentContainerMapState } from "../../containers/student/studentContainer.type";
+import { IStudentContainerMapState, IStudentContainerMapDispatch } from "../../containers/student/studentContainer.type";
 
-export interface IStudentComponentProps extends IStudentContainerMapState {
+export interface IStudentComponentProps extends IStudentContainerMapState, IStudentContainerMapDispatch {
 
 }

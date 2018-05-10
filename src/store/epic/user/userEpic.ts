@@ -9,16 +9,23 @@ import UserService from "../../../api/user/userService";
 
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/empty';
+import { Observable } from "rxjs/Observable";
 
 const userEpic: Epic<Action, IStoreState> = (action$, store) => {
   return action$.ofType(ActionsTypes.USER_LOGIN)
                 .switchMap((action: ILoginActionType) => {
                   return UserService.login(action.username, action.password)
-                         .map(res => (
-                           res.data.stateCode === 1 ?
+                          .map(res => {
+                            return res.data.stateCode === 1 ?
                             loginSuccessAction(action.username, res.data.data.userRole) :
                             loginFailAction(res.data.message)
-                         ))
+                          })
+                          .catch((error: Error) => {
+                            return Observable.of(loginFailAction(error.message))
+                          })
                 })
 }
 

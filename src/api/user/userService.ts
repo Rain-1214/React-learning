@@ -57,7 +57,7 @@ class UserService {
 
   public static activeUser (userId: number): Observable<AxiosResponse<IAjaxReturn<null>>> {
     return Observable.fromPromise(axios.post('/api/user/activeUser', { userId }))
-  }  
+  }
 
 }
 

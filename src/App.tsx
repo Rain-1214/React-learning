@@ -14,16 +14,18 @@ class App extends React.Component {
     return (
       <Provider store={store}>
         <Router>
-          <Switch>
-            <Redirect path="/" exact={true} to="/login" />
-            <Route path="/login" component={Login} />
-            <Route path="/register" component={Register} />
-            <Route path="/forgetPassword" component={ForgetPassword} />
-            <Route path="/student" component={Student} />
-            {/* <PrivateRoute path="/student" component={Student} /> */}
-            <Redirect path="*" exact={true} to="/login" />
+          <div>
+            <Switch>
+              <Redirect path="/" exact={true} to="/login" />
+              <Route path="/login" component={Login} />
+              <Route path="/register" component={Register} />
+              <Route path="/forgetPassword" component={ForgetPassword} />
+              <Route path="/student" component={Student} />
+              {/* <PrivateRoute path="/student" component={Student} /> */}
+              <Redirect path="*" exact={true} to="/login" />
+            </Switch>
             <HandleError />
-          </Switch>
+          </div>
         </Router>
       </Provider>
     );

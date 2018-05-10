@@ -6,8 +6,8 @@ import rootReducer from "./reducer";
 const epicMiddleware = createEpicMiddleware(rootEpic);
 const createStoreFactory = () => createStore(
   rootReducer,
-  applyMiddleware(epicMiddleware)
+  (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__(),
+  applyMiddleware(epicMiddleware),
 )
-
 export default createStoreFactory;
 
