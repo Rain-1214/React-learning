@@ -4,7 +4,9 @@ export interface IGradeAndClassSelectProps extends IGradeAndClassSelectMapState 
   canChange?: boolean;
   defaultGrade?: number;
   defalutClass?: number;
-  receiveGrandAndClass: (grade: number, classNum: number) => void;
+  selectWidth?: number;
+  selectSize?: "default" | "large" | "small" | undefined;
+  receiveGradeAndClass?: (grade: number, classNum: number) => void;
 }
 
 export interface IGradeAndClassSelectState {

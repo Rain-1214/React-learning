@@ -10,8 +10,11 @@ import { Observable } from "rxjs/Observable";
 
 const studentEpic: Epic<Action, IStoreState> = (action$, store) => {
   return action$.ofType(ActionsTypes.GET_GRADE)
-                .switchMap((action: IGetGradeAction) => (
-                  StudentService.getGrade()
+                .switchMap((action: IGetGradeAction) => {
+                  if (store.getState().student.gradeMessage.length !== 0) {
+                    return Observable.empty()
+                  }
+                  return StudentService.getGrade()
                                 .map(res => (
                                   res.data.stateCode === 1 ?
                                   getGradeSuccessAction(res.data.data) :
@@ -20,7 +23,7 @@ const studentEpic: Epic<Action, IStoreState> = (action$, store) => {
                                 .catch((error: Error) => (
                                   Observable.of(handleErrorAction('get grade ajax error', error.message, new Date().getTime()))
                                 ))
-                ))
+                })
 }
 
 export default studentEpic;
