@@ -6,5 +6,7 @@ export interface IStudentComponentProps extends IStudentContainerMapState, IStud
 }
 
 export interface IStudentComponentState {
-  students: Student[]
+  students: Student[];
+  deleteSelectVisible: boolean;
+  loadingFlag: boolean;
 }

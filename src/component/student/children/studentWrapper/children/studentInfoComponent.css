@@ -11,6 +11,10 @@
   display: flex;
 }
 
+.studnet li.li-checkbox{
+  height: 16px;
+}
+
 .studnet li .grade-wrapper {
   line-height: 39px;
 }
@@ -21,4 +25,8 @@
 
 .studnet li>span.label{
   width: 50px;
+}
+
+.button-group button {
+  margin-right: 10px;
 }
