@@ -84,7 +84,7 @@ class GradeAndClassSelectComponent extends React.Component<IGradeAndClassSelectP
       <>
         <Select style={{ width: this.props.selectWidth || 200 }}
                 size={this.props.selectSize || "default"}
-                defaultValue={ this.state.garde !== -1 ? this.currentGrade ? this.currentGrade.gradeName: undefined : undefined }
+                defaultValue={ this.props.defaultGrade !== -1 ? this.currentGrade ? this.currentGrade.gradeName: undefined : undefined }
                 placeholder='Grade'
                 onChange={this.gradeChange}>
           {gradeOptions}
@@ -92,7 +92,7 @@ class GradeAndClassSelectComponent extends React.Component<IGradeAndClassSelectP
         <Select style={{ width: this.props.selectWidth || 200 }}
                 size={this.props.selectSize || "default"}
                 value={ this.state.classNum !== -1 ? this.getClassNameById(this.state.classNum) : undefined }
-                defaultValue={ this.state.classNum !== -1 ? `${this.state.classNum}` : undefined} placeholder='Class'
+                defaultValue={ this.props.defalutClass !== -1 ? `${this.state.classNum}` : undefined} placeholder='Class'
                 onChange={this.classChange}>
           {classOptions}
         </Select>

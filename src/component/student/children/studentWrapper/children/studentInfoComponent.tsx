@@ -2,26 +2,48 @@ import * as React from "react";
 import { IStudentInfoComponentProps, IStudentInfoComponentState } from "./studentInfoComponent.type";
 import GradeAndClassSelect from "../../../../../containers/common/gradeAndClassSelect/gradeAndClassSelectContainer";
 import { Clone } from "../../../../../tool/clone";
-import { Form, Input, Button, Select, Checkbox, Modal } from "antd";
+import { Form, Input, Button, Select, Checkbox, Modal, Icon, message } from "antd";
 import { CheckboxChangeEvent } from "antd/lib/checkbox";
-
-import './studentInfoComponent.css';
 import { Student } from "../../../../../entity/student";
 import { Grade } from "../../../../../entity/grade";
 import { ClassNum } from "../../../../../entity/class";
 
+import './studentInfoComponent.css';
+import { Equal } from "../../../../../tool/Equal";
+
+interface ICascaderOption {
+  label: string;
+  value: string | number,
+  children?: ICascaderOption[]
+}
+
 class StudentInfoComponent extends React.Component<IStudentInfoComponentProps, IStudentInfoComponentState> {
+
+  public cascader: ICascaderOption[] = [
+    {
+      label: '1',
+      value: 1,
+      children: [
+        {
+          label: '2',
+          value: 2,
+        }
+      ]
+    }
+  ]
 
   public state: IStudentInfoComponentState = {
     studentCopy: {},
     canModify: false,
-    checkboxText: '未选择'
+    checkboxText: '未选择',
+    modifyVisible: false
   }
 
   public componentDidMount () {
     this.setState({
       studentCopy: Clone.deepCopy(this.props.student)
-    })
+    });
+
   }
 
   public triggleCanModify = () => {
@@ -30,9 +52,28 @@ class StudentInfoComponent extends React.Component<IStudentInfoComponentProps, I
     })
   }
 
+  public triggleModifyModal = (value: boolean) => {
+    if (value) {
+      if (this.state.studentCopy.classId === -1 || this.state.studentCopy.gradeId === -1) {
+        message.warn('没有选择班级或年级');
+        return;
+      } 
+    }
+    this.setState({
+      modifyVisible: value
+    })
+  }
+
   public gradeOrClassChange = (gradeId: number, classId: number) => {
     // tslint:disable-next-line:no-console
-    console.log('student detail componet gradeOrClassChange', `gradeId:${gradeId}`, `classId${classId}`)
+    console.log('student detail componet gradeOrClassChange', `gradeId:${gradeId}`, `classId${classId}`);
+    this.setState({
+      studentCopy: {
+        ...this.state.studentCopy,
+        gradeId,
+        classId
+      }
+    })
   }
 
   public selectFlagChange = (event: CheckboxChangeEvent) => {
@@ -43,15 +84,25 @@ class StudentInfoComponent extends React.Component<IStudentInfoComponentProps, I
   }
 
   public submitAfterModifyStudent = () => {
-    // tslint:disable-next-line:no-console
-    console.log(1)
+    if (Equal.deepEqual(this.state.studentCopy, this.props.student)) {
+      message.warn('没有做出任何修改');
+    } else {
+      this.props.form.validateFields((error: any, value: any) => {
+        // tslint:disable-next-line:no-console
+        console.log(error, value)
+      })
+    }
+    
   }
 
   public resetModifyStudent = () => {
     this.props.form.resetFields()
   }
 
-  public createStudentMessageLi = (student: Student): JSX.Element => {
+  public createStudentMessageLi = (student: Student): JSX.Element | null => {
+    if (!this.state.modifyVisible) {
+      return null;
+    }
     return (
       <>
         <li><span>姓名：</span>{student.name}</li>
@@ -63,6 +114,9 @@ class StudentInfoComponent extends React.Component<IStudentInfoComponentProps, I
   }
 
   public getGradeNameAndClassNamebyGidCid = (gradeId: number, classId: number) => {
+    if ((this.props.gradeMessage as Grade[]).length === 0) {
+      return null;
+    }
     const grade = (this.props.gradeMessage as Grade[]).find(e => e.id === gradeId) as Grade;
     const classNum = (grade as Grade).classes.find(e => e.id === classId) as ClassNum;
     return `${grade.gradeName}${classNum.className}`
@@ -140,9 +194,17 @@ class StudentInfoComponent extends React.Component<IStudentInfoComponentProps, I
             </li>
             <li>
               <span className="label">班级:</span>
-              <GradeAndClassSelect  selectWidth={90}
-                                    defaultGrade={this.props.student.gradeId} defalutClass={this.props.student.classId}
-                                    receiveGradeAndClass={this.gradeOrClassChange} canChange={this.state.canModify} />
+              {
+                this.state.canModify ? (
+                  <GradeAndClassSelect  selectWidth={90}
+                                        canChange={true} 
+                                        defaultGrade={this.state.studentCopy.gradeId} 
+                                        defalutClass={this.state.studentCopy.classId}
+                                        receiveGradeAndClass={this.gradeOrClassChange}/>
+                ) : (
+                  <span>{this.getGradeNameAndClassNamebyGidCid(this.props.student.gradeId as number, this.props.student.classId as number)}</span>
+                )
+              }
             </li>
           </ul>
           <div className="button-group">
@@ -150,17 +212,31 @@ class StudentInfoComponent extends React.Component<IStudentInfoComponentProps, I
             {
               this.state.canModify ? (
                 <>
-                  <Button type="primary" size="small">提交</Button>
+                  <Button type="primary" size="small" onClick={this.triggleModifyModal.bind(null, true)}>提交</Button>
                   <Button type="primary" size="small" onClick={this.resetModifyStudent}>还原</Button>
                 </>
               ) : (null)
             }
           </div>
         </Form>
-        <Modal title="确认修改">
+        <Modal 
+          className="modify-modal"
+          title="确认修改"
+          visible={this.state.modifyVisible}
+          onCancel={this.triggleModifyModal.bind(null, false)}
+          onOk={this.submitAfterModifyStudent}>
           <div>
             <ul>
+              {this.createStudentMessageLi(this.props.student)}
+            </ul>
+          </div>
+          <div>
 
+            <Icon type="double-right" />
+          </div>
+          <div>
+            <ul>
+              {this.createStudentMessageLi(this.state.studentCopy)}
             </ul>
           </div>
         </Modal>

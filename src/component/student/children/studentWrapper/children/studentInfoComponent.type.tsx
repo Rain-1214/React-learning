@@ -12,4 +12,5 @@ export interface IStudentInfoComponentState {
   studentCopy: Student;
   canModify: boolean;
   checkboxText: string;
+  modifyVisible: boolean;
 }
