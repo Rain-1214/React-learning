@@ -5,6 +5,7 @@ import { IStudentInfoContainerMapState } from "../../../../../containers/stuentI
 export interface IStudentInfoComponentProps extends FormComponentProps, IStudentInfoContainerMapState {
   student: Student;
   selectVisible: boolean;
+  refreshStudent: (page?: number) => void;
   selectChange: (selectFlag: boolean, currentStudent: Student) => void;
 }
 
@@ -13,4 +14,5 @@ export interface IStudentInfoComponentState {
   canModify: boolean;
   checkboxText: string;
   modifyVisible: boolean;
+  submitModifyStudentFlag: boolean;
 }

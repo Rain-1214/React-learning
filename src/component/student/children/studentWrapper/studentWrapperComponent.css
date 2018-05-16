@@ -1,5 +1,12 @@
 .student-wrapper {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
+}
+.student-wrapper>div{
+  margin-right: 2%;
+}
+
+.student-wrapper>div:nth-child(3n){
+  margin-right: 0;
 }

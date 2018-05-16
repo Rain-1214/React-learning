@@ -8,7 +8,8 @@ import { getGradeAction } from "../../store/actions/getGradeActions/getGradeActi
 const mapStateToProps: MapStateToProps<IStudentContainerMapState, IStudentComponentProps, IStoreState> = (state, ownProps) => {
   return {
     username: state.user.username,
-    userRole: state.user.userRole
+    userRole: state.user.userRole,
+    gradeMessage: state.student.gradeMessage
   }
 }
 

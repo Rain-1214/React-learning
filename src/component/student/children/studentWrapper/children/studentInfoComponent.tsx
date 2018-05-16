@@ -7,43 +7,25 @@ import { CheckboxChangeEvent } from "antd/lib/checkbox";
 import { Student } from "../../../../../entity/student";
 import { Grade } from "../../../../../entity/grade";
 import { ClassNum } from "../../../../../entity/class";
+import { Equal } from "../../../../../tool/Equal";
+import { StudentService } from "../../../../../api/student/studentService";
 
 import './studentInfoComponent.css';
-import { Equal } from "../../../../../tool/Equal";
-
-interface ICascaderOption {
-  label: string;
-  value: string | number,
-  children?: ICascaderOption[]
-}
 
 class StudentInfoComponent extends React.Component<IStudentInfoComponentProps, IStudentInfoComponentState> {
-
-  public cascader: ICascaderOption[] = [
-    {
-      label: '1',
-      value: 1,
-      children: [
-        {
-          label: '2',
-          value: 2,
-        }
-      ]
-    }
-  ]
 
   public state: IStudentInfoComponentState = {
     studentCopy: {},
     canModify: false,
     checkboxText: '未选择',
-    modifyVisible: false
+    modifyVisible: false,
+    submitModifyStudentFlag: true
   }
 
   public componentDidMount () {
     this.setState({
       studentCopy: Clone.deepCopy(this.props.student)
     });
-
   }
 
   public triggleCanModify = () => {
@@ -58,6 +40,10 @@ class StudentInfoComponent extends React.Component<IStudentInfoComponentProps, I
         message.warn('没有选择班级或年级');
         return;
       } 
+      if (Equal.deepEqual(this.state.studentCopy, this.props.student)) {
+        message.warn('没有做出任何修改');
+        return;
+      }
     }
     this.setState({
       modifyVisible: value
@@ -84,19 +70,30 @@ class StudentInfoComponent extends React.Component<IStudentInfoComponentProps, I
   }
 
   public submitAfterModifyStudent = () => {
-    if (Equal.deepEqual(this.state.studentCopy, this.props.student)) {
-      message.warn('没有做出任何修改');
-    } else {
-      this.props.form.validateFields((error: any, value: any) => {
-        // tslint:disable-next-line:no-console
-        console.log(error, value)
-      })
-    }
-    
-  }
-
-  public resetModifyStudent = () => {
-    this.props.form.resetFields()
+    this.props.form.validateFields((error: any, value: Student) => {
+      if (this.state.submitModifyStudentFlag) {
+        this.setState({
+          submitModifyStudentFlag: false
+        })
+        value.gradeId = this.state.studentCopy.gradeId;
+        value.classId = this.state.studentCopy.classId;
+        value.id = this.props.student.id;
+        value.sex = this.props.form.getFieldValue('sex') === '男' ? 1 : 2;
+        StudentService.updateStudent(value).subscribe(res => {
+          if (res.data.stateCode === 1) {
+            message.success('修改成功');
+          } else {
+            message.error(res.data.message);
+          }
+          this.setState({
+            canModify: false,
+            modifyVisible: false,
+            submitModifyStudentFlag: true
+          });
+          this.props.refreshStudent();
+        })
+      }
+    })
   }
 
   public createStudentMessageLi = (student: Student): JSX.Element | null => {
@@ -162,8 +159,8 @@ class StudentInfoComponent extends React.Component<IStudentInfoComponentProps, I
                         initialValue: this.state.studentCopy.sex === 1 ? '男' : '女'
                       })(
                         <Select>
-                          <Select.Option key='1' value='1'>男</Select.Option>
-                          <Select.Option key='2' value='2'>女</Select.Option>
+                          <Select.Option key='1' value='男'>男</Select.Option>
+                          <Select.Option key='2' value='女'>女</Select.Option>
                         </Select>
                       )
                     }
@@ -211,10 +208,7 @@ class StudentInfoComponent extends React.Component<IStudentInfoComponentProps, I
             <Button type="primary" size="small" onClick={this.triggleCanModify}>{this.state.canModify ? '取消修改' : '修改'}</Button>
             {
               this.state.canModify ? (
-                <>
-                  <Button type="primary" size="small" onClick={this.triggleModifyModal.bind(null, true)}>提交</Button>
-                  <Button type="primary" size="small" onClick={this.resetModifyStudent}>还原</Button>
-                </>
+                <Button type="primary" size="small" onClick={this.triggleModifyModal.bind(null, true)}>提交</Button>
               ) : (null)
             }
           </div>
@@ -224,7 +218,10 @@ class StudentInfoComponent extends React.Component<IStudentInfoComponentProps, I
           title="确认修改"
           visible={this.state.modifyVisible}
           onCancel={this.triggleModifyModal.bind(null, false)}
-          onOk={this.submitAfterModifyStudent}>
+          onOk={this.submitAfterModifyStudent}
+          okText="确认"
+          cancelText="取消"
+          confirmLoading={!this.state.submitModifyStudentFlag}>
           <div>
             <ul>
               {this.createStudentMessageLi(this.props.student)}

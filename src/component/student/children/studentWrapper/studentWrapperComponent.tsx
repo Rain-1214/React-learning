@@ -8,7 +8,13 @@ class StudentWrapperComponent extends React.Component<IStudentWrapperComponentPr
 
   public render () {
 
-    const studentsElement = this.props.studnets.map((value, index) => (<StudentInfo selectChange={this.props.selectChange} selectVisible={this.props.selectVisible} key={value.id} student={value} />))
+    const studentsElement = this.props.studnets.map((value, index) => (
+      <StudentInfo selectChange={this.props.selectChange} 
+                   selectVisible={this.props.selectVisible} 
+                   key={value.id} 
+                   student={value} 
+                   refreshStudent={this.props.refreshStudent}/>
+    ))
 
     return (
       <div className="student-wrapper">

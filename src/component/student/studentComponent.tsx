@@ -6,17 +6,22 @@ import { Button, message, Modal, Pagination, Spin } from "antd";
 import StudentWrapperComponent from "./children/studentWrapper/studentWrapperComponent";
 import { StudentService } from "../../api/student/studentService";
 import { Student } from "../../entity/student";
+import { Grade } from "../../entity/grade";
+import { ClassNum } from "../../entity/class";
 
 class StudentComponent extends React.Component<IStudentComponentProps, IStudentComponentState> {
 
   public currentPageNum: number = 1;
-  public studentCountNum: number = 0;
   public deleteStudentIds: Set<number> = new Set();
+  public currentGrade: number = -1;
+  public currentClass: number = -1;
 
   public state: IStudentComponentState = {
     students: [],
     deleteSelectVisible: false,
-    loadingFlag: false
+    loadingFlag: false,
+    studentCountNum: 0,
+    pageVisible: true
   }
 
   public async componentDidMount() {
@@ -24,22 +29,53 @@ class StudentComponent extends React.Component<IStudentComponentProps, IStudentC
     this.loadStudent();
   }
 
-  public loadStudent() {
-    StudentService.getStudent(this.currentPageNum).subscribe(res => {
-      if (res.data.stateCode === 1) {
-        this.studentCountNum = res.data.data.countNum;
+  public loadStudent = () => {
+    this.setState({
+      loadingFlag: true
+    })
+    if (this.currentClass !== -1 && this.currentGrade !== -1) {
+      StudentService.getStuByGidCid(this.currentGrade, this.currentClass).subscribe(res => {
+        if (res.data.stateCode === 1) {
+          this.setState({
+            pageVisible: false,
+            students: res.data.data
+          })
+        } else {
+          message.error(res.data.message);
+        }
         this.setState({
-          students: res.data.data.students,
+          loadingFlag: false
         })
-      } else {
-        message.error(res.data.message);
-      }
-    });
+      })
+    } else {
+      StudentService.getStudent(this.currentPageNum).subscribe(res => {
+        if (res.data.stateCode === 1) {
+          this.setState({
+            studentCountNum: res.data.data.countNum,
+            students: res.data.data.students,
+            pageVisible: true
+          })
+        } else {
+          message.error(res.data.message);
+        }
+        this.setState({
+          loadingFlag: false
+        })
+      });
+    }
   }
 
-  public gradeOrClassChange (grade: number, classNum: number) {
+  public getAllStudent = () => {
+    this.currentClass = -1;
+    this.currentGrade = -1;
+    this.loadStudent();
+  }
+
+  public gradeOrClassChange = (grade: number, classNum: number) => {
     // tslint:disable-next-line:no-console
     console.log('student Component gradeOrClassChange', grade, classNum)
+    this.currentClass = classNum;
+    this.currentGrade = grade;
   }
 
   public pageNumChange = (page: number, pageSize: number) => {
@@ -87,6 +123,15 @@ class StudentComponent extends React.Component<IStudentComponentProps, IStudentC
     selectFlag ? this.deleteStudentIds.add(student.id as number) : this.deleteStudentIds.delete(student.id as number);
   }
 
+  public getGradeNameClassNameByGIdCId = (gradeId: number, classId: number) => {
+    if ((this.props.gradeMessage as Grade[]).length === 0) {
+      return null;
+    }
+    const grade = this.props.gradeMessage.find(e => e.id === gradeId) as Grade;
+    const classNum = grade.classes.find(e => e.id === classId) as ClassNum;
+    return `${grade.gradeName}${classNum.className}`;
+  }
+
   public render () {
 
     return (
@@ -96,7 +141,8 @@ class StudentComponent extends React.Component<IStudentComponentProps, IStudentC
         </div>
         <div className={StudentComponentStyle.setPadding}>
           <GradeAndClassSelect canChange={true} receiveGradeAndClass={this.gradeOrClassChange} />
-          <Button type="primary">查找</Button>
+          <Button type="primary" onClick={this.loadStudent}>查找</Button>
+          <Button type="primary" onClick={this.getAllStudent}>获取全部同学</Button>
           {
             this.state.deleteSelectVisible ? (
               <>
@@ -109,12 +155,25 @@ class StudentComponent extends React.Component<IStudentComponentProps, IStudentC
           }
         </div>
         <div className={StudentComponentStyle.setPadding}>
+          当前路径: {(this.currentGrade !== -1 && this.currentClass !== -1) ? this.getGradeNameClassNameByGIdCId(this.currentGrade, this.currentClass) : '全部同学'}
+        </div>
+        <div className={StudentComponentStyle.setPadding}>
           <Spin tip="loading..." spinning={this.state.loadingFlag}>
             <StudentWrapperComponent studnets={this.state.students} 
                                      selectVisible={this.state.deleteSelectVisible}
-                                     selectChange={this.deleteSelectChange}/>
+                                     selectChange={this.deleteSelectChange}
+                                     refreshStudent={this.loadStudent}/>
           </Spin>
-          <Pagination style={{textAlign: 'right'}} defaultPageSize={6} total={this.studentCountNum} onChange={this.pageNumChange} />
+          {
+            this.state.pageVisible ? (
+              <Pagination style={{textAlign: 'right'}} defaultPageSize={6} total={this.state.studentCountNum} onChange={this.pageNumChange} />
+            ) : (
+              null
+            )
+          }
+        </div>
+        <div className={StudentComponentStyle.setPadding}>
+          <Button type="primary">添加同学</Button>
         </div>
       </div>
     )

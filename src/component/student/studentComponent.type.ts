@@ -9,4 +9,6 @@ export interface IStudentComponentState {
   students: Student[];
   deleteSelectVisible: boolean;
   loadingFlag: boolean;
+  studentCountNum: number;
+  pageVisible: boolean;
 }

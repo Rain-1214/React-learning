@@ -2,6 +2,8 @@ import { IGradeAndClassSelectMapState } from "../../../../containers/common/grad
 
 export interface IGradeAndClassSelectProps extends IGradeAndClassSelectMapState {
   canChange?: boolean;
+  grade?: number;
+  classNum?: number;
   defaultGrade?: number;
   defalutClass?: number;
   selectWidth?: number;
