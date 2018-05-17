@@ -122,7 +122,7 @@ class StudentInfoComponent extends React.Component<IStudentInfoComponentProps, I
   public render () {
 
     return (
-      <div className="studnet">
+      <div className="student">
         <Form>
           <ul>
             {

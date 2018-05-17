@@ -192,7 +192,7 @@ export class ToolBase {
    * 检测一个对象或数组中是否存在无效值 可自定义需要检测属性(数组为自定义下标)
    * @param {Object|Array} target 检测的目标
    * @param {String[]} property? 检测的属性
-   * @returns {boolean} 检测的属性当中存在无效值 false 否则 true
+   * @returns {boolean} 检测的属性当中不存在无效值 true 否则 false
    */
   public static checkEmptyProperty (target: any, property?: string[]): boolean {
     if (this.getValueTag(target) === this.tag.objectTag) {

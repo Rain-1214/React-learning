@@ -11,4 +11,8 @@ export interface IStudentComponentState {
   loadingFlag: boolean;
   studentCountNum: number;
   pageVisible: boolean;
+  addStudents: Student[];
+  selectAddStudentsIndex: Set<number>;
+  addSelectVisible: boolean;
+  addStudentIspending: boolean;
 }

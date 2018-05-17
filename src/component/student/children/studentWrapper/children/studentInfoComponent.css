@@ -1,4 +1,4 @@
-.studnet{
+.student{
   width: 32%;
   padding: 20px 30px;
   border: 1px solid #c1c1c1;
@@ -6,24 +6,24 @@
   margin-bottom: 15px;
 }
 
-.studnet li {
+.student li {
   height: 63px;
   display: flex;
 }
 
-.studnet li.li-checkbox{
+.student li.li-checkbox{
   height: 16px;
 }
 
-.studnet li .grade-wrapper {
+.student li .grade-wrapper {
   line-height: 39px;
 }
 
-.studnet li>span {
+.student li>span {
   line-height: 39px;
 }
 
-.studnet li>span.label{
+.student li>span.label{
   width: 50px;
 }
 

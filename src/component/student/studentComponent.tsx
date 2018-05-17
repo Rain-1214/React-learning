@@ -8,6 +8,9 @@ import { StudentService } from "../../api/student/studentService";
 import { Student } from "../../entity/student";
 import { Grade } from "../../entity/grade";
 import { ClassNum } from "../../entity/class";
+import AddStudentWrapperComponent from "./children/addStudentWrapper/addStudentWrapperComponent";
+import { Observable } from "rxjs";
+import { ToolBase } from "../../tool/ToolBase";
 
 class StudentComponent extends React.Component<IStudentComponentProps, IStudentComponentState> {
 
@@ -21,7 +24,11 @@ class StudentComponent extends React.Component<IStudentComponentProps, IStudentC
     deleteSelectVisible: false,
     loadingFlag: false,
     studentCountNum: 0,
-    pageVisible: true
+    pageVisible: true,
+    addStudents: [],
+    selectAddStudentsIndex: new Set(),
+    addSelectVisible: false,
+    addStudentIspending: false
   }
 
   public async componentDidMount() {
@@ -83,9 +90,15 @@ class StudentComponent extends React.Component<IStudentComponentProps, IStudentC
     this.loadStudent();
   }
 
-  public changeSelect (value: boolean) {
+  public changeDeleteSelect = (value: boolean) => {
     this.setState({
       deleteSelectVisible: value
+    })
+  }
+
+  public changeAddSelect = (value: boolean) => {
+    this.setState({
+      addSelectVisible: value
     })
   }
 
@@ -119,7 +132,73 @@ class StudentComponent extends React.Component<IStudentComponentProps, IStudentC
     })
   }
 
-  public deleteSelectChange = (selectFlag: boolean, student: Student) => {
+  public addStudents = (students: Student[]): Observable<boolean> => {
+    this.setState({
+      addStudentIspending: true
+    })
+    return StudentService.addStudent(students).map(res => {
+      this.setState({
+        addStudentIspending: false
+      })
+      if (res.data.stateCode !== 1) {
+        message.error(res.data.message)
+      }
+      return res.data.stateCode === 1;
+    })
+  }
+
+  public checkAddStudnetsValid = (students: Student[]) => {
+    if (!students.every(e => ToolBase.checkEmptyProperty(e, ['name', 'sex', 'studentNumber', 'gradeId', 'classId']))) {
+      message.error('添加的选项中有无效的值');
+      return false;
+    }
+    const tempSet = new Set();
+    let studentNumberRepeat = true;
+    students.forEach(e => {
+      if (tempSet.has(e.studentNumber)) {
+        studentNumberRepeat = false
+      } else {
+        tempSet.add(e.studentNumber)
+      }
+    });
+    if (!studentNumberRepeat) {
+      message.error('添加的选项中有学号重复');
+    }
+    return studentNumberRepeat;
+  }
+
+  public addSelectStudents = () => {
+    const tempStudents = [...this.state.addStudents.filter((e, i) => this.state.selectAddStudentsIndex.has(i))]
+    // tslint:disable-next-line:no-console
+    console.log(tempStudents)
+    if (this.checkAddStudnetsValid(tempStudents)) {
+      // tslint:disable-next-line:no-console
+      console.log(tempStudents)
+      // this.addStudents(tempStudents).subscribe(res => {
+      //   if (res) {
+      //     this.setState({
+      //       selectAddStudentsIndex: new Set()
+      //     })
+      //   }
+      // })
+    }
+  }
+
+  public reseiveStudentIndex = (index: number, selectFlag: boolean) => {
+    if (selectFlag) {
+      this.setState({
+        selectAddStudentsIndex: new Set(this.state.selectAddStudentsIndex.add(index))
+      })
+    } else {
+      const tempSet = new Set(this.state.selectAddStudentsIndex)
+      tempSet.delete(index)
+      this.setState({
+        selectAddStudentsIndex: tempSet
+      })
+    }
+  }
+
+  public reseiveDeleteSelectChange = (selectFlag: boolean, student: Student) => {
     selectFlag ? this.deleteStudentIds.add(student.id as number) : this.deleteStudentIds.delete(student.id as number);
   }
 
@@ -130,6 +209,15 @@ class StudentComponent extends React.Component<IStudentComponentProps, IStudentC
     const grade = this.props.gradeMessage.find(e => e.id === gradeId) as Grade;
     const classNum = grade.classes.find(e => e.id === classId) as ClassNum;
     return `${grade.gradeName}${classNum.className}`;
+  }
+
+  public addEmptyStudent = () => {
+    this.setState({
+      addStudents: [
+        ...this.state.addStudents,
+        new Student()
+      ]
+    })
   }
 
   public render () {
@@ -146,11 +234,11 @@ class StudentComponent extends React.Component<IStudentComponentProps, IStudentC
           {
             this.state.deleteSelectVisible ? (
               <>
-                <Button type="default" onClick={this.changeSelect.bind(this, false)}>取消勾选</Button>
+                <Button type="default" onClick={this.changeDeleteSelect.bind(null, false)}>取消勾选</Button>
                 <Button type="danger" onClick={this.deleteStudents}>删除</Button>
               </>
             ) : (
-              <Button type="default" onClick={this.changeSelect.bind(this, true)}>勾选删除</Button>
+              <Button type="default" onClick={this.changeDeleteSelect.bind(null, true)}>勾选删除</Button>
             )
           }
         </div>
@@ -161,7 +249,7 @@ class StudentComponent extends React.Component<IStudentComponentProps, IStudentC
           <Spin tip="loading..." spinning={this.state.loadingFlag}>
             <StudentWrapperComponent studnets={this.state.students} 
                                      selectVisible={this.state.deleteSelectVisible}
-                                     selectChange={this.deleteSelectChange}
+                                     selectChange={this.reseiveDeleteSelectChange}
                                      refreshStudent={this.loadStudent}/>
           </Spin>
           {
@@ -173,7 +261,26 @@ class StudentComponent extends React.Component<IStudentComponentProps, IStudentC
           }
         </div>
         <div className={StudentComponentStyle.setPadding}>
-          <Button type="primary">添加同学</Button>
+          <Button type="primary" onClick={this.addEmptyStudent}>增添一个空的同学</Button>
+          {
+            this.state.addStudents.length >= 1 ? (
+              <Button type="primary" onClick={this.changeAddSelect.bind(null, true)}>勾选添加</Button>
+            ) : (null)
+          }
+          {
+            this.state.selectAddStudentsIndex.size >= 1 ? (
+              <>
+                <Button type="primary" onClick={this.addSelectStudents}>添加已勾选的同学</Button>
+                <Button type="primary" onClick={this.changeAddSelect.bind(null, false)}>取消勾选</Button>
+              </>
+            ) : (null)
+          }
+        </div>
+        <div className={StudentComponentStyle.setPadding}>
+          <AddStudentWrapperComponent selectVisible={this.state.addSelectVisible} 
+                                      gradeMessage={this.props.gradeMessage}
+                                      students={this.state.addStudents}
+                                      reseiveStudentIndex={this.reseiveStudentIndex}/>
         </div>
       </div>
     )
