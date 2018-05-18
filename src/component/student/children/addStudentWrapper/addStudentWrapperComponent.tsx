@@ -15,10 +15,12 @@ class AddStudentWrapperComponent extends React.Component<IAddStudentWrapperCompo
           this.props.students.map((e, i) => (
             <AddStudentComponent selectVisible={this.props.selectVisible}
                                  gradeMesage={this.props.gradeMessage}
-                                 key={i}
+                                 key={e.id}
                                  student={e}
                                  studentIndex={i}
-                                 reseiveStudentIndex={this.props.reseiveStudentIndex}/>
+                                 reseiveStudentIndex={this.props.reseiveStudentIndex}
+                                 addSingleStudent={this.props.addSingleStudent}
+                                 deleteAddStudent={this.props.deleteAddStudent}/>
           ))
         }
       </div>

@@ -7,6 +7,8 @@ export interface IAddStudentComponentProps extends FormComponentProps {
   gradeMesage: Grade[];
   selectVisible: boolean;
   studentIndex: number;
+  addSingleStudent: (index: number) => void;
+  deleteAddStudent: (index: number) => void;
   reseiveStudentIndex: (index: number, selectFlag: boolean) => void;
 }
 

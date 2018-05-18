@@ -11,6 +11,8 @@ import { ClassNum } from "../../entity/class";
 import AddStudentWrapperComponent from "./children/addStudentWrapper/addStudentWrapperComponent";
 import { Observable } from "rxjs";
 import { ToolBase } from "../../tool/ToolBase";
+import { Clone } from "../../tool/clone";
+import { User } from "../../entity/user";
 
 class StudentComponent extends React.Component<IStudentComponentProps, IStudentComponentState> {
 
@@ -18,6 +20,8 @@ class StudentComponent extends React.Component<IStudentComponentProps, IStudentC
   public deleteStudentIds: Set<number> = new Set();
   public currentGrade: number = -1;
   public currentClass: number = -1;
+
+  public addStudentId: number = 1;
 
   public state: IStudentComponentState = {
     students: [],
@@ -173,14 +177,20 @@ class StudentComponent extends React.Component<IStudentComponentProps, IStudentC
     console.log(tempStudents)
     if (this.checkAddStudnetsValid(tempStudents)) {
       // tslint:disable-next-line:no-console
-      console.log(tempStudents)
-      // this.addStudents(tempStudents).subscribe(res => {
-      //   if (res) {
-      //     this.setState({
-      //       selectAddStudentsIndex: new Set()
-      //     })
-      //   }
-      // })
+      console.log('通过检测:', tempStudents);
+      this.addStudents(tempStudents).subscribe(res => {
+        if (res) {
+          const tempStudnetsIndexArray = Array.from(this.state.selectAddStudentsIndex).sort((a,b) => b - a);
+          const tempStudentsArray = Clone.deepCopy(this.state.addStudents);
+          tempStudnetsIndexArray.forEach(e => { tempStudentsArray.splice(e, 1) });
+          // tslint:disable-next-line:no-console
+          console.log('添加之后：', tempStudentsArray)
+          this.setState({
+            selectAddStudentsIndex: new Set(),
+            addStudents: tempStudentsArray
+          })
+        }
+      })
     }
   }
 
@@ -215,9 +225,53 @@ class StudentComponent extends React.Component<IStudentComponentProps, IStudentC
     this.setState({
       addStudents: [
         ...this.state.addStudents,
-        new Student()
+        new Student(this.addStudentId)
       ]
+    }, () => {
+      this.addStudentId++;
     })
+  }
+
+  public deleteAddStudent = (index: number) => {
+    Modal.confirm({
+      title: '确认删除',
+      content: '您确认删除么？',
+      okText: '确认',
+      cancelText: '取消',
+      onOk:() => {
+        const tempStudentsArray = Clone.deepCopy(this.state.addStudents);
+        tempStudentsArray.splice(index, 1);
+        const tempSet = new Set(this.state.selectAddStudentsIndex);
+        if (tempSet.has(index)) {
+          tempSet.delete(index)
+        }
+        this.setState({
+          addStudents: tempStudentsArray,
+          selectAddStudentsIndex: tempSet
+        })
+      }
+    })
+  }
+
+  public addSingleStudent = (index: number) => {
+    const students = [Clone.deepCopy(this.state.addStudents[index])];
+    if (this.checkAddStudnetsValid(students)) {
+      this.addStudents(students).subscribe(res => {
+        if (res) {
+          const tempStudents = Clone.deepCopy(this.state.addStudents);
+          const tempSet = new Set(this.state.selectAddStudentsIndex);
+          if (tempSet.has(index)) {
+            tempSet.delete(index);
+          }
+          tempStudents.splice(index, 1);
+          this.setState({
+            addStudents: tempStudents,
+            selectAddStudentsIndex: tempSet
+          })
+          message.success('添加成功')
+        }
+      })
+    }
   }
 
   public render () {
@@ -225,7 +279,7 @@ class StudentComponent extends React.Component<IStudentComponentProps, IStudentC
     return (
       <div>
         <div className={StudentComponentStyle.userInfo}>
-          用户名:{this.props.username}  身份:{this.props.userRole}
+          用户名:{this.props.username}  身份:{User.translateUserRole(this.props.userRole)}
         </div>
         <div className={StudentComponentStyle.setPadding}>
           <GradeAndClassSelect canChange={true} receiveGradeAndClass={this.gradeOrClassChange} />
@@ -280,7 +334,9 @@ class StudentComponent extends React.Component<IStudentComponentProps, IStudentC
           <AddStudentWrapperComponent selectVisible={this.state.addSelectVisible} 
                                       gradeMessage={this.props.gradeMessage}
                                       students={this.state.addStudents}
-                                      reseiveStudentIndex={this.reseiveStudentIndex}/>
+                                      reseiveStudentIndex={this.reseiveStudentIndex}
+                                      addSingleStudent={this.addSingleStudent}
+                                      deleteAddStudent={this.deleteAddStudent}/>
         </div>
       </div>
     )

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Form, Input, Icon, Select, Cascader, Checkbox } from "antd";
+import { Form, Input, Icon, Select, Cascader, Checkbox, Button } from "antd";
 import { IAddStudentComponentProps, IAddStudentComponentFormData, IAddStudentComponentState } from "./addStudentComponent.type";
 import { ICascaderOption } from "../../../../../entity/cascaderOption";
 
@@ -39,11 +39,9 @@ class AddStudentComponent extends React.Component<IAddStudentComponentProps, IAd
         <Form>
           {
             this.props.selectVisible ? (
-              <Form.Item>
-                <Checkbox onChange={this.selectChange}>
-                  { this.state.selectProps ? '已选择' : '未选择' }
-                </Checkbox>
-              </Form.Item>
+              <Checkbox onChange={this.selectChange}>
+                { this.state.selectProps ? '已选择' : '未选择' }
+              </Checkbox>
             ) : null
           }
           <Form.Item label="姓名" labelCol={{span: 6}} wrapperCol={{span:16}}>
@@ -95,6 +93,14 @@ class AddStudentComponent extends React.Component<IAddStudentComponentProps, IAd
               )
             }
           </Form.Item>
+          <div>
+            <Button type="primary" size="small" onClick={this.props.addSingleStudent.bind(null, this.props.studentIndex)}>
+              添加单个同学
+            </Button>
+            <Button type="danger" size="small" onClick={this.props.deleteAddStudent.bind(null, this.props.studentIndex)}>
+              删除
+            </Button>
+          </div>
         </Form>
       </div>
     )
@@ -115,7 +121,5 @@ export default Form.create({
         props.student[e] = allValues[e]
       }
     })
-    // tslint:disable-next-line:no-console
-    console.log(props.student)
   }
 })(AddStudentComponent);
